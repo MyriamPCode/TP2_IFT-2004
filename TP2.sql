@@ -31,7 +31,7 @@ create table TP2_UTILISATEUR (
  
 create sequence NO_UTILISATEUR_SEQ
     start with 1000 increment by 5;
-    
+
 create table TP2_ENTREPRISE (
     NO_ENTREPRISE number(6) not null,
     NOM_ENT varchar2(40) not null,
