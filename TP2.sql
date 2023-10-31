@@ -31,7 +31,7 @@ create table TP2_ENTREPRISE (
     CODE_POSTAL_ENT char(7) not null,
     VILLE_ENT varchar2(40) not null,
     COURRIEL_ENT varchar(2) not null,
-    NO_ENTREPRISE_DIRIGEANTE number(6) not null
+    NO_ENTREPRISE_DIRIGEANTE number(6) not null,
     constraint PK_ENTREPRISE primary key(NO_ENTREPRISE));
     
 --create test
