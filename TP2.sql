@@ -33,3 +33,5 @@ create table TP2_ENTREPRISE (
     COURRIEL_ENT varchar(2) not null,
     NO_ENTREPRISE_DIRIGEANTE number(6) not null
     constraint PK_ENTREPRISE primary key(NO_ENTREPRISE));
+    
+--create test
