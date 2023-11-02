@@ -13,6 +13,10 @@ drop table TP2_QUESTION cascade constraints;
 drop table TP2_CHOIX_REPONSE cascade constraints;
 drop table TP2_REPONSE_UTILISATEUR cascade constraints;
 
+drop sequence NO_UTILISATEUR_SEQ;
+drop sequence ID_QUESTION_SEQ;
+drop sequence ID_CHOIX_REPONSE_SEQ;
+
 -- 1
 create table TP2_UTILISATEUR (
     NO_UTILISATEUR number(6) not null,
@@ -23,6 +27,9 @@ create table TP2_UTILISATEUR (
     TYPE_UTI varchar2(14) not null,
     constraint PK_UTILISATEUR primary key(NO_UTILISATEUR),
     constraint AK_UTI_COURRIEL_UTI unique(COURRIEL_UTI));
+ 
+create sequence NO_UTILISATEUR_SEQ
+    start with 1000 increment by 5;
     
 create table TP2_ENTREPRISE (
     NO_ENTREPRISE number(6) not null,
@@ -51,7 +58,10 @@ create table TP2_QUESTION (
         references TP2_TYPE_QUESTION(CODE_TYPE_QUESTION)/*,
     constraint FK_NO_SONDAGE foreign key(NO_SONDAGE)
         references TP2_SONDAGE(NO_SONDAGE)*/);
-        
+    
+create sequence ID_QUESTION_SEQ
+    start with 1 increment by 1;
+    
 create table TP2_CHOIX_REPONSE (
     ID_CHOIX_REPONSE number(6) not null,
     ORDRE_REPONSE number(3) not null,
@@ -60,6 +70,9 @@ create table TP2_CHOIX_REPONSE (
     constraint PK_CHOIX_REPONSE primary key(ID_CHOIX_REPONSE),
     constraint FK_ID_QUESTION foreign key(ID_QUESTION)
         references TP2_QUESTION(ID_QUESTION));
+        
+create sequence ID_CHOIX_REPONSE_SEQ
+    start with 10000 increment by 1;
         
 create table TP2_REPONSE_UTILISATEUR (
     NO_UTILISATEUR number(6) not null,
