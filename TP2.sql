@@ -21,7 +21,8 @@ create table TP2_UTILISATEUR (
     PRENOM_UTI varchar2(40) not null,
     NOM_UTI varchar2(40) not null,
     TYPE_UTI varchar2(14) not null,
-    constraint PK_UTILISATEUR primary key(NO_UTILISATEUR));
+    constraint PK_UTILISATEUR primary key(NO_UTILISATEUR),
+    constraint AK_UTI_COURRIEL_UTI unique(COURRIEL_UTI));
     
 create table TP2_ENTREPRISE (
     NO_ENTREPRISE number(6) not null,
