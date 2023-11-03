@@ -172,3 +172,14 @@ insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRE
 insert into TP2_ENTREPRISE (NO_ENTREPRISE, NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, NO_ENTREPRISE_DIREIGEANTE) values (2, 'Cobalt Soul', '32 soul avenue', 'C0B 1S0', 'Zadash', 'cobalt.soul@gmail.com', 1);
 insert into TP2_ENTREPRISE (NO_ENTREPRISE, NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values (1, 'King''s council', '1 king avenue', 'R1K 1C1', 'Rexxentrum', 'king.council@gmail.com');
 
+insert into TP2_PROJET (CODE_PROJET, DATE_PRO, NOM_PRO, NO_ENTREPRISE) values (1000, to_date('2023-01-14', 'RRRR-MM-DD'), 'Construction d"un bateau pirate', 3655);
+insert into TP2_PROJET (CODE_PROJET, DATE_PRO, NOM_PRO, NO_ENTREPRISE) values (1255, to_date('2023-07-14', 'RRRR-MM-DD'), 'Approbation de nouvelles potions de guérision', 1200);
+
+insert into TP2_UTILISATEUR_PROJET (NOM_UTILISATEUR, CODE_PROJET) values (2225, 6660);
+insert into TP2_UTILISATEUR_PROJET (NOM_UTILISATEUR, CODE_PROJET) values (0120,1800);
+
+insert into TP2_PROFIL_ACCESSIBILITE (NO_PROFIL, THEME_PROF, TEXTE_PROF, CODE_PROJET) values (4015, 'Potions en folie !', 'Venez apprendre à créer des potions avec notre sorcière préférée !', 1775);
+insert into TP2_PROFIL_ACCESSIBILITE (NO_PROFIL, THEME_PROF, TEXTE_PROF, CODE_PROJET) values (0095, 'Entre ciel et terre', 'Améliorer le réseau entre le monde céleste et terrestre', 1010);
+
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (4000, 0035, 10.00, 15.00);
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (0010, 0120, 20.00, 10.00);
