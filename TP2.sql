@@ -20,7 +20,6 @@ drop sequence ID_CHOIX_REPONSE_SEQ;
 
 -- 1
 -- a
-
 create table TP2_UTILISATEUR (
     NO_UTILISATEUR number(6) not null,
     COURRIEL_UTI varchar2(40) not null,
@@ -41,8 +40,8 @@ create table TP2_ENTREPRISE (
     ADRESSE_ENT varchar2(40) not null,
     CODE_POSTAL_ENT char(7) not null,
     VILLE_ENT varchar2(40) not null,
-    COURRIEL_ENT varchar(2) not null,
-    NO_ENTREPRISE_DIRIGEANTE number(6) not null,
+    COURRIEL_ENT varchar2(40) not null,
+    NO_ENTREPRISE_DIRIGEANTE number(6) null,
     constraint PK_ENTREPRISE primary key(NO_ENTREPRISE));
     
 create table TP2_PROJET (
@@ -169,6 +168,6 @@ create table TP2_REPONSE_UTILISATEUR (
 insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (123456, 'trym.tealeaf@gmail.com', 'motDePasse', 'Trym', 'Tealeaf', 'employ�');
 insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (234567, 'anahno.mistvale@gmail.com', 'motDePasse', 'Anahno', 'Mistvale', 'administrateur');
 
-insert into TP2_ENTREPRISE (NO_ENTREPRISE, NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, NO_ENTREPRISE_DIREIGEANTE) values (2, 'Cobalt Soul', '32 soul avenue', 'C0B 1S0', 'Zadash', 'cobalt.soul@gmail.com', 1);
-insert into TP2_ENTREPRISE (NO_ENTREPRISE, NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values (1, 'King''s council', '1 king avenue', 'R1K 1C1', 'Rexxentrum', 'king.council@gmail.com');
+insert into TP2_ENTREPRISE (NO_ENTREPRISE, NOM_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values (1, 'King''s council', '1 king avenue', 'R1K 1C1', 'Rexxentrum', 'king.council@gmail.com');
+insert into TP2_ENTREPRISE (NO_ENTREPRISE, NOM_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values (2, 'Cobalt Soul', '32 soul avenue', 'C0B 1S0', 'Zadash', 'cobalt.soul@gmail.com');
 
