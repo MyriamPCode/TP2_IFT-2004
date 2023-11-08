@@ -189,7 +189,7 @@ insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LA
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (489968, 999666, 004587, 036259);
 
 -- insérer les insert des tables de Stéphanie ici
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (66666666, to_date('22-11-08','RR-MM-DD'), to_date('23-04-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (66666666, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
 
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('MC04', 'Multiples choices with 4 options');
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('EQ22', 'Explanation questions');
@@ -232,3 +232,19 @@ update TP2_TYPE_QUESTION
                                     from TP2_QUESTION 
                                     where ORDRE_QUESTION = 3 and TEXTE_QUE = 'En route vers lan 3000' );
 
+-- f
+insert into TP2_ENTREPRISE (NO_ENTREPRISE, NOM_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, NO_ENTREPRISE_DIRIGEANTE) values (000003, 'centre de dragon', '123 Dragon', 'D6A 6O3', 'Zadash', '123dragon@gmail.com', 000001);
+
+select NOM_ENT, CODE_POSTAL_ENT
+    from TP2_ENTREPRISE
+    where NOM_ENT like'%centre%';
+    
+-- g
+select ORDRE_QUESTION, TEXTE_QUE
+    from TP2_QUESTION
+    where NO_SONDAGE = (select NO_SONDAGE
+                            from TP2_SONDAGE
+                            where to_char(DATE_CREATION_SON) > to_char(to_date('23-09-01','RR-MM-DD')) and to_char(DATE_CREATION_SON) < to_char(to_date('23-09-30','RR-MM-DD')))
+    order by NO_SONDAGE asc;
+    
+-- h
