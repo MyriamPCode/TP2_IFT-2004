@@ -188,7 +188,18 @@ insert into TP2_PROFIL_ACCESSIBILITE (NO_PROFIL, THEME_PROF, CODE_PROJET) values
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (842635, 143602, 004587, 036259);
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (489968, 999666, 004587, 036259);
 
--- insérer les insert des tables de Stéphanie ici
+insert into TP2_PROJET (CODE_PROJET, DATE_PRO, NOM_PRO, NO_ENTREPRISE) values (1000, to_date('2023-01-14', 'RRRR-MM-DD'), 'Construction d"un bateau pirate', 3655);
+insert into TP2_PROJET (CODE_PROJET, DATE_PRO, NOM_PRO, NO_ENTREPRISE) values (1255, to_date('2023-07-14', 'RRRR-MM-DD'), 'Approbation de nouvelles potions de guérision', 1200);
+
+insert into TP2_UTILISATEUR_PROJET (NOM_UTILISATEUR, CODE_PROJET) values (2225, 6660);
+insert into TP2_UTILISATEUR_PROJET (NOM_UTILISATEUR, CODE_PROJET) values (0120,1800);
+
+insert into TP2_PROFIL_ACCESSIBILITE (NO_PROFIL, THEME_PROF, TEXTE_PROF, CODE_PROJET) values (4015, 'Potions en folie !', 'Venez apprendre à créer des potions avec notre sorcière préférée !', 1775);
+insert into TP2_PROFIL_ACCESSIBILITE (NO_PROFIL, THEME_PROF, TEXTE_PROF, CODE_PROJET) values (0095, 'Entre ciel et terre', 'Améliorer le réseau entre le monde céleste et terrestre', 1010);
+
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (4000, 0035, 10.00, 15.00);
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (0010, 0120, 20.00, 10.00);
+
 insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (66666666, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
 insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (590000, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Chewbacca', 'A1B2');
 
@@ -326,3 +337,6 @@ select NOM_ENT
                           having count(*) = 2);
                           
 --k
+
+
+
