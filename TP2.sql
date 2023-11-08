@@ -189,7 +189,7 @@ insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LA
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (489968, 999666, 004587, 036259);
 
 -- insérer les insert des tables de Stéphanie ici
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (66666666, to_date('23-11-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (66666666, to_date('22-11-08','RR-MM-DD'), to_date('23-04-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
 
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('MC04', 'Multiples choices with 4 options');
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('EQ22', 'Explanation questions');
@@ -202,3 +202,33 @@ insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QU
 
 insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123456, 589998, 'Yoda');
 insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123456, 589999, 'Obi-Wan Kenobi');
+
+-- c
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL)
+    select NO_PROFIL
+        from TP2_PROFIL_ACCESSIBILITE_PLAN
+        where NO_PROFIL = 12;
+
+-- d
+-- à revoir
+delete from TP2_CHOIX_REPONSE 
+    where ID_CHOIX_REPONSE = (select ID_CHOIX_REPONSE
+                                from TP2_CHOIX_REPONSE
+                                where ID_QUESTION = (select ID_QUESTION
+                                                        from TP2_QUESTION
+                                                        where NO_SONDAGE = (select NO_SONDAGE
+                                                                                from TP2_SONDAGE
+                                                                                where to_char(add_months(DATE_FIN_SON, 6), 'RR-MM-DD') < to_char(SYSDATE, 'RR-MM-DD'))));
+
+delete from TP2_REPONSE_UTILISATEUR
+    where ID_CHOIX_REPONSE is null;
+                                
+-- e
+insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (478651, 003, 'EQ22', 'En route vers lan 3000', 66666666);
+
+update TP2_TYPE_QUESTION 
+    set DESC_TYPE_QUE = 'Vrai ou Faux' 
+    where CODE_TYPE_QUESTION = (select CODE_TYPE_QUESTION 
+                                    from TP2_QUESTION 
+                                    where ORDRE_QUESTION = 3 and TEXTE_QUE = 'En route vers lan 3000' );
+
