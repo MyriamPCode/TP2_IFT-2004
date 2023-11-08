@@ -136,7 +136,7 @@ create table TP2_QUESTION (
     ORDRE_QUESTION number(3) default 001 not null,
     CODE_TYPE_QUESTION char(4) not null,
     TEXTE_QUE varchar2(100) not null,
-    NO_SONDAGE number(6) not null,
+    NO_SONDAGE number(8) not null,
     constraint PK_QUESTION primary key(ID_QUESTION),
     constraint FK_CODE_TYPE_QUESTION foreign key(CODE_TYPE_QUESTION)
         references TP2_TYPE_QUESTION(CODE_TYPE_QUESTION),
@@ -189,11 +189,16 @@ insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LA
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (489968, 999666, 004587, 036259);
 
 -- insérer les insert des tables de Stéphanie ici
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (66666666, to_date('23-11-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
 
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('MC04', 'Multiples choices with 4 options');
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('EQ22', 'Explanation questions');
 
-insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUESTION, NO_SONDAGE) values (574689, 002, 'MC04', 'Which jedi survives order 66', 66666666);
-insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUESTION, NO_SONDAGE) values (784132, 004, 'EQ22', 'What is Order 66', 66666666);
+insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (574689, 002, 'MC04', 'Which jedi survives order 66', 66666666);
+insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (784132, 004, 'EQ22', 'What is Order 66', 66666666);
 
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (589998, 015, 'Anakin Skywalker, Yoda, Master Windu, Ashoka Tano', 574689);
+insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (589999, 016, 'Obi-wan Kenobi, Luke Skywalker, Darth Vader, Padme Amidala', 574689);
+
+insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123456, 589998, 'Yoda');
+insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123456, 589999, 'Obi-Wan Kenobi');
