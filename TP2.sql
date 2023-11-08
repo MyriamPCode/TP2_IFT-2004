@@ -190,18 +190,25 @@ insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LA
 
 -- insérer les insert des tables de Stéphanie ici
 insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (66666666, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (590000, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Chewbacca', 'A1B2');
 
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('MC04', 'Multiples choices with 4 options');
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('EQ22', 'Explanation questions');
+insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('RB11', 'À développement');
 
 insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (574689, 002, 'MC04', 'Which jedi survives order 66', 66666666);
 insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (784132, 004, 'EQ22', 'What is Order 66', 66666666);
+insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (575000, 006, 'RB11', 'How start Order 66', 66666666);
 
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (589998, 015, 'Anakin Skywalker, Yoda, Master Windu, Ashoka Tano', 574689);
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (589999, 016, 'Obi-wan Kenobi, Luke Skywalker, Darth Vader, Padme Amidala', 574689);
+insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (589997, 017, 'Obi-wan Kenobi, Luke Skywalker, Darth Vader, Padme Amidala', 575000);
 
 insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123456, 589998, 'Yoda');
 insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123456, 589999, 'Obi-Wan Kenobi');
+insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123456, 589997, 'Darth Vader');
+insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123456, 590000, 'Darth Vader');
+insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123457, 590000, 'Darth Vader');
 
 -- c
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL)
@@ -240,11 +247,82 @@ select NOM_ENT, CODE_POSTAL_ENT
     where NOM_ENT like'%centre%';
     
 -- g
-select ORDRE_QUESTION, TEXTE_QUE
-    from TP2_QUESTION
-    where NO_SONDAGE = (select NO_SONDAGE
-                            from TP2_SONDAGE
-                            where to_char(DATE_CREATION_SON) > to_char(to_date('23-09-01','RR-MM-DD')) and to_char(DATE_CREATION_SON) < to_char(to_date('23-09-30','RR-MM-DD')))
-    order by NO_SONDAGE asc;
+select Q.ORDRE_QUESTION, Q.TEXTE_QUE
+    from TP2_QUESTION Q
+    inner join TP2_SONDAGE S on Q.NO_SONDAGE = S.NO_SONDAGE
+    where extract(year from S.DATE_CREATION_SON) = 2023
+    and extract(month from S.DATE_CREATION_SON) = 9
+    order by S.NO_SONDAGE, Q.ORDRE_QUESTION;
+
     
 -- h
+select TEXTE_REP 
+    from TP2_REPONSE_UTILISATEUR
+    where ID_CHOIX_REPONSE in (select ID_CHOIX_REPONSE 
+                                   from TP2_CHOIX_REPONSE
+                                   where ID_QUESTION in (select ID_QUESTION 
+                                                            from TP2_QUESTION
+                                                            where CODE_TYPE_QUESTION in (select CODE_TYPE_QUESTION 
+                                                                                         from TP2_TYPE_QUESTION 
+                                                                                         where DESC_TYPE_QUE in ('À développement'))));
+
+select R.TEXTE_REP 
+    from TP2_REPONSE_UTILISATEUR R, TP2_CHOIX_REPONSE C
+    where R.ID_CHOIX_REPONSE = C.ID_CHOIX_REPONSE 
+    and R.ID_CHOIX_REPONSE = (select C.ID_CHOIX_REPONSE  
+                                  from TP2_CHOIX_REPONSE C, TP2_QUESTION Q
+                                  where C.ID_QUESTION = Q.ID_QUESTION 
+                                  and C.ID_QUESTION = (select Q.ID_QUESTION 
+                                                          from TP2_QUESTION Q, TP2_TYPE_QUESTION T
+                                                          where Q.CODE_TYPE_QUESTION = T.CODE_TYPE_QUESTION 
+                                                          and Q.CODE_TYPE_QUESTION = (select CODE_TYPE_QUESTION 
+                                                                                      from TP2_TYPE_QUESTION 
+                                                                                      where DESC_TYPE_QUE = 'À développement')));
+                                                                                      
+select TEXTE_REP 
+    from TP2_REPONSE_UTILISATEUR R
+    where exists ( select ID_CHOIX_REPONSE
+                    from TP2_CHOIX_REPONSE C
+                    where R.ID_CHOIX_REPONSE = C.ID_CHOIX_REPONSE 
+                    and exists (select ID_QUESTION  
+                                    from TP2_QUESTION Q
+                                    where C.ID_QUESTION = Q.ID_QUESTION 
+                                    and exists (select CODE_TYPE_QUESTION
+                                                    from TP2_TYPE_QUESTION T
+                                                    where Q.CODE_TYPE_QUESTION = T.CODE_TYPE_QUESTION 
+                                                    and  DESC_TYPE_QUE = 'À développement')));
+ 
+ --i                                                   
+select U.PRENOM_UTI || ' ' || U.NOM_UTI as NOM_COMPLET, S.TITRE_SON as NOM_SONDAGE, count(R.NO_UTILISATEUR) as NB_REPONSE
+    from TP2_UTILISATEUR U
+    join TP2_REPONSE_UTILISATEUR R on U.NO_UTILISATEUR = R.NO_UTILISATEUR
+    join TP2_SONDAGE S on R.ID_CHOIX_REPONSE = S.NO_SONDAGE
+    group by U.PRENOM_UTI, U.NOM_UTI, S.TITRE_SON
+    order by NB_REPONSE desc; 
+
+--j
+select NOM_ENT
+    from TP2_ENTREPRISE
+    where NO_ENTREPRISE not in (select NO_ENTREPRISE
+                                    from TP2_PROJET
+                                    group by NO_ENTREPRISE
+                                    having count(*) = 2);
+                                    
+select NOM_ENT
+    from TP2_ENTREPRISE
+    minus
+    select E.NOM_ENT 
+        from TP2_ENTREPRISE E 
+        join TP2_PROJET P on E.NO_ENTREPRISE = P.NO_ENTREPRISE
+        group by E.NO_ENTREPRISE, E.NOM_ENT
+        having count(*) = 2;
+        
+select NOM_ENT
+    from TP2_ENTREPRISE E
+    where not exists (select 1
+                          from TP2_PROJET P
+                          where E.NO_ENTREPRISE = P.NO_ENTREPRISE
+                          group by P.NO_ENTREPRISE
+                          having count(*) = 2);
+                          
+--k
