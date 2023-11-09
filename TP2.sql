@@ -377,3 +377,7 @@ create or replace view VUE_ENTREPRISE as
 
 select * from VUE_ENTREPRISE;
 
+/*Il n'est pas possible d'ajouter un enregistrement dans Oracle car la vue est automatiquement mise à jour par l'utilisateur à la moindre modification de la table. Il n'y a donc aucun enrgistrement qui ne peut être effectuée.*/
+
+--n 
+
