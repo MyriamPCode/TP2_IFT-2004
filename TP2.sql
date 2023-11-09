@@ -386,3 +386,11 @@ delete from TP2_UTILISATEUR_PROJET
 update TP2_UTILISATEUR_PROJET 
     set CODE_PROJET = 'C3D4'
     where CODE_PROJET = 'A1B2';
+
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE)
+    select NO_IMAGE
+        from TP2_PROFIL_ACCESSIBILITE_IMAGE
+        where NO_IMAGE = 666;
+        
+alter table TP2_UTILISATEUR
+    add AGE_UTIL number(2) null;
