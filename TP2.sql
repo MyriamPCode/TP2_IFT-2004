@@ -368,3 +368,12 @@ select COURRIEL_UTI
     from TP2_UTILISATEUR
     where COURRIEL_UTI like '%.ca'
     and COURRIEL_UTI in (select COURRIEL_ENT from TP2_ENTREPRISE);
+
+--m
+drop view VUE_ENTREPRISE;
+create or replace view VUE_ENTREPRISE as 
+    select distinct NOM_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT
+        from TP2_ENTREPRISE;
+
+select * from VUE_ENTREPRISE;
+
