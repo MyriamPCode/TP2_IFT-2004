@@ -380,4 +380,9 @@ select * from VUE_ENTREPRISE;
 /*Il n'est pas possible d'ajouter un enregistrement dans Oracle car la vue est automatiquement mise à jour par l'utilisateur à la moindre modification de la table. Il n'y a donc aucun enrgistrement qui ne peut être effectuée.*/
 
 --n 
+delete from TP2_UTILISATEUR_PROJET
+    where CODE_PROJET = 'C3D4';
 
+update TP2_UTILISATEUR_PROJET 
+    set CODE_PROJET = 'C3D4'
+    where CODE_PROJET = 'A1B2';
