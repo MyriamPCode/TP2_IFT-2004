@@ -182,46 +182,46 @@ insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRE
 insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'anahno.mistvale@gmail.com', 'motDePasse', 'Anahno', 'Mistvale', 'administrateur');
 
 insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values ('King''s council', 'C:\User\Trym\KingsConcil\logo.jpg', '1 king avenue', 'R1K 1C1', 'Rexxentrum', 'king.council@gmail.com');
-insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, NO_ENTREPRISE_DIREIGEANTE) values ('Cobalt Soul', 'C:\User\Anahno\CobaltSoul\logo.jpg', '32 soul avenue', 'C0B 1S0', 'Zadash', 'cobalt.soul@gmail.com', 1);
+insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values ('Cobalt Soul', 'C:\User\Anahno\CobaltSoul\logo.jpg', '32 soul avenue', 'C0B 1S0', 'Zadash', 'cobalt.soul@gmail.com');
 
 insert into TP2_PROJET (CODE_PROJET, DATE_PRO, NOM_PRO, NO_ENTREPRISE) values ('A1B2', to_date('23-11-07','RR-MM-DD'), 'Order 66', 1);
 insert into TP2_PROJET (CODE_PROJET, DATE_PRO, NOM_PRO, NO_ENTREPRISE) values ('C3D4', to_date('23-11-07','RR-MM-DD'), 'Projet Nemesis', 2);
 
-insert into TP2_UTILISATEUR_PROJET (NO_UTILISATEUR, CODE_PROJET) values (1010, 'A1B2');
-insert into TP2_UTILISATEUR_PROJET (NO_UTILISATEUR, CODE_PROJET) values (1010, 'C3D4');
+insert into TP2_UTILISATEUR_PROJET (NO_UTILISATEUR, CODE_PROJET) values (1005, 'A1B2');
+insert into TP2_UTILISATEUR_PROJET (NO_UTILISATEUR, CODE_PROJET) values (1005, 'C3D4');
 
-insert into TP2_PROFIL_ACCESSIBILITE (NO_PROFIL, THEME_PROF, CODE_PROJET) values (143602, 'Jedi', 'A1B2');
-insert into TP2_PROFIL_ACCESSIBILITE (NO_PROFIL, THEME_PROF, CODE_PROJET) values (999666, 'Sith', 'A1B2');
+insert into TP2_PROFIL_ACCESSIBILITE (THEME_PROF, CODE_PROJET) values ('Jedi', 'A1B2');
+insert into TP2_PROFIL_ACCESSIBILITE (THEME_PROF, CODE_PROJET) values ('Sith', 'A1B2');
 
-insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (842635, 143602, 004587, 036259);
-insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_IMAGE, NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (489968, 999666, 004587, 036259);
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (666, 004587, 036259);
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (667, 004587, 036259);
 
 -- insérer les insert des tables de Stéphanie ici
-insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (1, 'Porte cachée' , 'Vue porte cachée ouest corridor jardin' , 8, 25);
-insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (2, 'La voute de Chtulhu' , 'Vue entrée nord cité R''lyeh avec voute' , 4, 6);
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (100, 'Porte cachée' , 'Vue porte cachée ouest corridor jardin' , 8, 25);
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (102, 'La voute de Chtulhu' , 'Vue entrée nord cité R''lyeh avec voute' , 4, 6);
 
 
-insert into TP2_PROFIL_ACCESSIBILITE_PLAN (NO_PROFIL, HAUTEUR_PLA, LARGEUR_PLA) values (1, 50, 100);
-insert into TP2_PROFIL_ACCESSIBILITE_PLAN (NO_PROFIL, HAUTEUR_PLA, LARGEUR_PLA) values (2, 1080, 1920);
+insert into TP2_PROFIL_ACCESSIBILITE_PLAN (NO_PROFIL, HAUTEUR_PLA, LARGEUR_PLA) values (666, 50, 100);
+insert into TP2_PROFIL_ACCESSIBILITE_PLAN (NO_PROFIL, HAUTEUR_PLA, LARGEUR_PLA) values (667, 1080, 1920);
 
 insert into TP2_PROFIL_ACCESSIBILITE_PLAN_COORDONNEE (NO_PLAN, LONGITUDE_COO, LATITUDE_COO) values (1, 48.804568, 2.121241);
 insert into TP2_PROFIL_ACCESSIBILITE_PLAN_COORDONNEE (NO_PLAN, LONGITUDE_COO, LATITUDE_COO) values (2, -47.15, -126.716666);
 
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('2000-01-01', 'YYYY-MM-DD'), to_date('2000-04-01', 'YYYY-MM-DD'), to_date('2000-04-30', 'YYYY-MM-DD'), 'Évaluez votre niveau de satisfaction de l''accès à la salle du trône.', 'KC39');
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('1926-05-11', 'YYYY-MM-DD'), to_date('1928-02-26', 'YYYY-MM-DD'), to_date('1929-02-26', 'YYYY-MM-DD'), 'Quel(s) mode(s) de transport prévoyez-vous utiliser pour vous rendre au lieu de dormance de Chtulu?', 'CS01');
---insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (66666666, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('2000-01-01', 'YYYY-MM-DD'), to_date('2000-04-01', 'YYYY-MM-DD'), to_date('2000-04-30', 'YYYY-MM-DD'), 'Évaluez votre niveau de satisfaction de l''accès à la salle du trône.', 'A1B2');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('1926-05-11', 'YYYY-MM-DD'), to_date('1928-02-26', 'YYYY-MM-DD'), to_date('1929-02-26', 'YYYY-MM-DD'), 'Quel(s) mode(s) de transport prévoyez-vous utiliser pour vous rendre au lieu de dormance de Chtulu?', 'C3D4');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
 
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('MC04', 'Multiples choices with 4 options');
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('EQ22', 'Explanation questions');
 
-insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (ID_QUESTION_SEQ.nextval, 002, 'MC04', 'Which jedi survives order 66', 66666666);
-insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (ID_QUESTION_SEQ.nextval, 004, 'EQ22', 'What is Order 66', 66666666);
+insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (ID_QUESTION_SEQ.nextval, 002, 'MC04', 'Which jedi survives order 66', 5000);
+insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (ID_QUESTION_SEQ.nextval, 004, 'EQ22', 'What is Order 66', 5100);
 
-insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (ID_CHOIX_REPONSE_SEQ.nextval, 015, 'Anakin Skywalker, Yoda, Master Windu, Ashoka Tano', 574689);
-insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (ID_CHOIX_REPONSE_SEQ.nextval, 016, 'Obi-wan Kenobi, Luke Skywalker, Darth Vader, Padme Amidala', 574689);
+insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (ID_CHOIX_REPONSE_SEQ.nextval, 015, 'Anakin Skywalker, Yoda, Master Windu, Ashoka Tano', 1);
+insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (ID_CHOIX_REPONSE_SEQ.nextval, 016, 'Obi-wan Kenobi, Luke Skywalker, Darth Vader, Padme Amidala', 2);
 
-insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123456, 589998, 'Yoda');
-insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (123456, 589999, 'Obi-Wan Kenobi');
+insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10000, 'Yoda');
+insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10001, 'Obi-Wan Kenobi');
 
 -- c
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL)
@@ -244,7 +244,7 @@ delete from TP2_REPONSE_UTILISATEUR
     where ID_CHOIX_REPONSE is null;
                                 
 -- e
-insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (478651, 003, 'EQ22', 'En route vers lan 3000', 66666666);
+insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (ID_QUESTION_SEQ.nextval, 003, 'EQ22', 'En route vers lan 3000', 5000);
 
 update TP2_TYPE_QUESTION 
     set DESC_TYPE_QUE = 'Vrai ou Faux' 
@@ -253,7 +253,7 @@ update TP2_TYPE_QUESTION
                                     where ORDRE_QUESTION = 3 and TEXTE_QUE = 'En route vers lan 3000' );
 
 -- f
-insert into TP2_ENTREPRISE (NO_ENTREPRISE, NOM_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, NO_ENTREPRISE_DIRIGEANTE) values (000003, 'centre de dragon', '123 Dragon', 'D6A 6O3', 'Zadash', '123dragon@gmail.com', 000001);
+insert into TP2_ENTREPRISE (NOM_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, NO_ENTREPRISE_DIRIGEANTE) values ('centre de dragon', '123 Dragon', 'D6A 6O3', 'Zadash', '123dragon@gmail.com', 000001);
 
 select NOM_ENT, CODE_POSTAL_ENT
     from TP2_ENTREPRISE
