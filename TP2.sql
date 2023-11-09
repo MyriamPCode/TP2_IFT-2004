@@ -235,15 +235,12 @@ insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL)
         where NO_PROFIL = 12;
 
 -- d
--- à revoir
-delete from TP2_CHOIX_REPONSE 
-    where ID_CHOIX_REPONSE = (select ID_CHOIX_REPONSE
-                                from TP2_CHOIX_REPONSE
-                                where ID_QUESTION = (select ID_QUESTION
-                                                        from TP2_QUESTION
-                                                        where NO_SONDAGE = (select NO_SONDAGE
-                                                                                from TP2_SONDAGE
-                                                                                where to_char(add_months(DATE_FIN_SON, 6), 'RR-MM-DD') < to_char(SYSDATE, 'RR-MM-DD'))));
+delete from TP2_REPONSE_UTILISATEUR 
+    where NO_UTILISATEUR in (select U.NO_UTILISATEUR
+                                from TP2_UTILISATEUR U
+                                join TP2_UTILISATEUR_PROJET P ON U.NO_UTILISATEUR = P.NO_UTILISATEUR
+                                join TP2_SONDAGE S ON P.CODE_PROJET = S.CODE_PROJET
+                                where sysdate - interval '6' month > S.DATE_FIN_SON);
 
 delete from TP2_REPONSE_UTILISATEUR
     where ID_CHOIX_REPONSE is null;
