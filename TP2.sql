@@ -194,7 +194,7 @@ begin
     
     exception
     when E_DIGITS_INVALID then
-        dbms_output.put_line('Exceed limits of caracter for password');
+    dbms_output.put_line('Exceed limits of caracter for password');
 end FCT_GENERER_MOT_DE_PASSE;
 /
 
@@ -410,3 +410,32 @@ insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE)
         
 alter table TP2_UTILISATEUR
     add AGE_UTIL number(2) null;
+
+
+-- 2
+-- d
+/*Avant d'insérer la réponse d'un utilisateur dans la base de données, on vérifie si ce même utilisateur à déjà répondu au sondage.
+Permet de garder une intégrité des réponses en empêchant les utilisateurs de répondre plusieurs fois.*/
+create or replace trigger TRG_ALREADY_ANSWERED 
+before insert or update of TEXTE_REP on TP2_REPONSE_UTILISATEUR
+declare
+    V_NO_UTILISATEUR number(6);
+    E_USER_ALREADY_ANSWERED exception;
+begin        
+    select NO_UTILISATEUR
+        into V_NO_UTILISATEUR
+        from TP2_REPONSE_UTILISATEUR 
+        where ID_CHOIX_REPONSE = (select ID_CHOIX_REPONSE
+                                    from TP2_CHOIX_REPONSE
+                                    where ID_QUESTION = (select ID_QUESTION
+                                                            from TP2_QUESTION));
+    
+    if V_NO_UTILISATEUR is not null then
+        raise E_USER_ALREADY_ANSWERED;
+    end if;
+    
+    exception
+        when E_USER_ALREADY_ANSWERED then
+            dbms_output.put_line(V_NO_UTILISATEUR + 'already answered sondage');   
+end TRG_ALREADY_ANSWERED;
+/
