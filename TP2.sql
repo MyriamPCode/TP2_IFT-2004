@@ -177,19 +177,31 @@ create or replace view TP2_ADMINISTRATEUR (COURRIEL_ADM, MOT_DE_PASSE_ADM, NOM_A
         where TYPE_UTI = 'Administrateur';
         
 -- 2c
+set serveroutput on;
 create or replace function FCT_GENERER_MOT_DE_PASSE(NB_DIGITS in number) return varchar2 
 is
     V_PASSWORD varchar2(16);
+    V_LENGTH number(2) := NB_DIGITS;
+    E_DIGITS_INVALID exception;
 begin
-    V_PASSWORD := dbms_random.string('p', NB_DIGITS);   
+    if (NB_DIGITS < 12) then
+        V_LENGTH := 12;
+    elsif (NB_DIGITS > 16) then
+        raise E_DIGITS_INVALID;
+    end if;
+    
+    V_PASSWORD := dbms_random.string('p', V_LENGTH);   
     return V_PASSWORD;
+    
+    exception
+    when E_DIGITS_INVALID then
+        dbms_output.put_line('Exceed limits of caracter for password');
 end FCT_GENERER_MOT_DE_PASSE;
 /
 
 -- b
--- les mots de passe ne sont pas final
-insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'trym.tealeaf@gmail.com', FCT_GENERER_MOT_DE_PASSE(14), 'Trym', 'Tealeaf', 'employé');
-insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'anahno.mistvale@gmail.com', FCT_GENERER_MOT_DE_PASSE(16), 'Anahno', 'Mistvale', 'administrateur');
+insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'trym.tealeaf@gmail.com', FCT_GENERER_MOT_DE_PASSE(10), 'Trym', 'Tealeaf', 'Employé');
+insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'anahno.mistvale@gmail.com', FCT_GENERER_MOT_DE_PASSE(16), 'Anahno', 'Mistvale', 'Administrateur');
 
 insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values ('King''s council', 'C:\User\Trym\KingsConcil\logo.jpg', '1 king avenue', 'R1K 1C1', 'Rexxentrum', 'king.council@gmail.com');
 insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values ('Cobalt Soul', 'C:\User\Anahno\CobaltSoul\logo.jpg', '32 soul avenue', 'C0B 1S0', 'Zadash', 'cobalt.soul@gmail.com');
