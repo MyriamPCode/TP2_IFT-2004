@@ -1,4 +1,3 @@
-
 drop table TP2_UTILISATEUR cascade constraints;
 drop table TP2_ENTREPRISE cascade constraints;
 drop table TP2_PROJET cascade constraints;
@@ -175,12 +174,22 @@ create table TP2_REPONSE_UTILISATEUR (
 create or replace view TP2_ADMINISTRATEUR (COURRIEL_ADM, MOT_DE_PASSE_ADM, NOM_ADM, PRENOM_ADM) as
     select COURRIEL_UTI, MOT_DE_PASSE_UTI, NOM_UTI, PRENOM_UTI 
         from TP2_UTILISATEUR
-        where TYPE_UTI = 'Administrateur';        
+        where TYPE_UTI = 'Administrateur';
         
+-- 2c
+create or replace function FCT_GENERER_MOT_DE_PASSE(NB_DIGITS in number) return varchar2 
+is
+    V_PASSWORD varchar2(16);
+begin
+    V_PASSWORD := dbms_random.string('p', NB_DIGITS);   
+    return V_PASSWORD;
+end FCT_GENERER_MOT_DE_PASSE;
+/
+
 -- b
 -- les mots de passe ne sont pas final
-insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'trym.tealeaf@gmail.com', 'motDePasse', 'Trym', 'Tealeaf', 'employé');
-insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'anahno.mistvale@gmail.com', 'motDePasse', 'Anahno', 'Mistvale', 'administrateur');
+insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'trym.tealeaf@gmail.com', FCT_GENERER_MOT_DE_PASSE(14), 'Trym', 'Tealeaf', 'employé');
+insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'anahno.mistvale@gmail.com', FCT_GENERER_MOT_DE_PASSE(16), 'Anahno', 'Mistvale', 'administrateur');
 
 insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values ('King''s council', 'C:\User\Trym\KingsConcil\logo.jpg', '1 king avenue', 'R1K 1C1', 'Rexxentrum', 'king.council@gmail.com');
 insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values ('Cobalt Soul', 'C:\User\Anahno\CobaltSoul\logo.jpg', '32 soul avenue', 'C0B 1S0', 'Zadash', 'cobalt.soul@gmail.com');
@@ -223,7 +232,6 @@ insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (ID_CHOIX_REPONSE_SEQ.nextval, 015, 'Anakin Skywalker, Yoda, Master Windu, Ashoka Tano', 1);
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (ID_CHOIX_REPONSE_SEQ.nextval, 016, 'Obi-wan Kenobi, Luke Skywalker, Darth Vader, Padme Amidala', 2);
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (ID_CHOIX_REPONSE_SEQ.nextval, 017, 'Obi-wan Kenobi, Luke Skywalker, Darth Vader, Padme Amidala', 3);
-
 
 insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10000, 'Yoda');
 insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10001, 'Obi-Wan Kenobi');
@@ -348,5 +356,3 @@ select NOM_ENT
                                    from TP2_PROJET
                                    where DATE_PRO >= sysdate - interval '12' month)
 order by NOM_ENT asc;
-
-
