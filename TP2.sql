@@ -18,7 +18,6 @@ drop sequence TP2_NO_SONDAGE_SEQ;
 drop sequence ID_QUESTION_SEQ;
 drop sequence ID_CHOIX_REPONSE_SEQ;
 
-
 -- 1
 -- a
 create table TP2_UTILISATEUR (
@@ -174,12 +173,34 @@ create table TP2_REPONSE_UTILISATEUR (
 create or replace view TP2_ADMINISTRATEUR (COURRIEL_ADM, MOT_DE_PASSE_ADM, NOM_ADM, PRENOM_ADM) as
     select COURRIEL_UTI, MOT_DE_PASSE_UTI, NOM_UTI, PRENOM_UTI 
         from TP2_UTILISATEUR
-        where TYPE_UTI = 'Administrateur';        
+        where TYPE_UTI = 'Administrateur';
         
+-- 2c
+set serveroutput on;
+create or replace function FCT_GENERER_MOT_DE_PASSE(NB_DIGITS in number) return varchar2 
+is
+    V_PASSWORD varchar2(16);
+    V_LENGTH number(2) := NB_DIGITS;
+    E_DIGITS_INVALID exception;
+begin
+    if (NB_DIGITS < 12) then
+        V_LENGTH := 12;
+    elsif (NB_DIGITS > 16) then
+        raise E_DIGITS_INVALID;
+    end if;
+    
+    V_PASSWORD := dbms_random.string('p', V_LENGTH);   
+    return V_PASSWORD;
+    
+    exception
+    when E_DIGITS_INVALID then
+        dbms_output.put_line('Exceed limits of caracter for password');
+end FCT_GENERER_MOT_DE_PASSE;
+/
+
 -- b
--- les mots de passe ne sont pas final
-insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'trym.tealeaf@gmail.com', 'motDePasse', 'Trym', 'Tealeaf', 'employé');
-insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'anahno.mistvale@gmail.com', 'motDePasse', 'Anahno', 'Mistvale', 'administrateur');
+insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'trym.tealeaf@gmail.com', FCT_GENERER_MOT_DE_PASSE(10), 'Trym', 'Tealeaf', 'Employï¿½');
+insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'anahno.mistvale@gmail.com', FCT_GENERER_MOT_DE_PASSE(16), 'Anahno', 'Mistvale', 'Administrateur');
 
 insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values ('King''s council', 'C:\User\Trym\KingsConcil\logo.jpg', '1 king avenue', 'R1K 1C1', 'Rexxentrum', 'king.council@gmail.com');
 insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values ('Cobalt Soul', 'C:\User\Anahno\CobaltSoul\logo.jpg', '32 soul avenue', 'C0B 1S0', 'Zadash', 'cobalt.soul@gmail.com');
@@ -196,9 +217,8 @@ insert into TP2_PROFIL_ACCESSIBILITE (THEME_PROF, CODE_PROJET) values ('Sith', '
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (666, 004587, 036259);
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (667, 004587, 036259);
 
--- insérer les insert des tables de Stéphanie ici
-insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (100, 'Porte cachée' , 'Vue porte cachée ouest corridor jardin' , 8, 25);
-insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (102, 'La voute de Chtulhu' , 'Vue entrée nord cité R''lyeh avec voute' , 4, 6);
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (100, 'Porte cachï¿½e' , 'Vue porte cachï¿½e ouest corridor jardin' , 8, 25);
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (102, 'La voute de Chtulhu' , 'Vue entrï¿½e nord citï¿½ R''lyeh avec voute' , 4, 6);
 
 insert into TP2_PROFIL_ACCESSIBILITE_PLAN (NO_PROFIL, HAUTEUR_PLA, LARGEUR_PLA) values (666, 50, 100);
 insert into TP2_PROFIL_ACCESSIBILITE_PLAN (NO_PROFIL, HAUTEUR_PLA, LARGEUR_PLA) values (667, 1080, 1920);
@@ -208,12 +228,12 @@ insert into TP2_PROFIL_ACCESSIBILITE_PLAN_COORDONNEE (NO_PLAN, LONGITUDE_COO, LA
 
 insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
 insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Chewbacca', 'A1B2');
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('2000-01-01', 'YYYY-MM-DD'), to_date('2000-04-01', 'YYYY-MM-DD'), to_date('2000-04-30', 'YYYY-MM-DD'), 'Évaluez votre niveau de satisfaction de l''accès à la salle du trône.', 'A1B2');
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('1926-05-11', 'YYYY-MM-DD'), to_date('1928-02-26', 'YYYY-MM-DD'), to_date('1929-02-26', 'YYYY-MM-DD'), 'Quel(s) mode(s) de transport prévoyez-vous utiliser pour vous rendre au lieu de dormance de Chtulu?', 'C3D4');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('2000-01-01', 'YYYY-MM-DD'), to_date('2000-04-01', 'YYYY-MM-DD'), to_date('2000-04-30', 'YYYY-MM-DD'), 'ï¿½valuez votre niveau de satisfaction de l''accï¿½s ï¿½ la salle du trï¿½ne.', 'A1B2');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('1926-05-11', 'YYYY-MM-DD'), to_date('1928-02-26', 'YYYY-MM-DD'), to_date('1929-02-26', 'YYYY-MM-DD'), 'Quel(s) mode(s) de transport prï¿½voyez-vous utiliser pour vous rendre au lieu de dormance de Chtulu?', 'C3D4');
 
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('MC04', 'Multiples choices with 4 options');
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('EQ22', 'Explanation questions');
-insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('RB11', 'À développement');
+insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('RB11', 'ï¿½ dï¿½veloppement');
 
 insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (ID_QUESTION_SEQ.nextval, 002, 'MC04', 'Which jedi survives order 66', 5200);
 insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (ID_QUESTION_SEQ.nextval, 004, 'EQ22', 'What is Order 66', 5200);
@@ -222,7 +242,6 @@ insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (ID_CHOIX_REPONSE_SEQ.nextval, 015, 'Anakin Skywalker, Yoda, Master Windu, Ashoka Tano', 1);
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (ID_CHOIX_REPONSE_SEQ.nextval, 016, 'Obi-wan Kenobi, Luke Skywalker, Darth Vader, Padme Amidala', 2);
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (ID_CHOIX_REPONSE_SEQ.nextval, 017, 'Obi-wan Kenobi, Luke Skywalker, Darth Vader, Padme Amidala', 3);
-
 
 insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10000, 'Yoda');
 insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10001, 'Obi-Wan Kenobi');
@@ -279,7 +298,7 @@ select TEXTE_REP
                                                             from TP2_QUESTION
                                                             where CODE_TYPE_QUESTION in (select CODE_TYPE_QUESTION 
                                                                                          from TP2_TYPE_QUESTION 
-                                                                                         where DESC_TYPE_QUE in ('À développement'))));
+                                                                                         where DESC_TYPE_QUE in ('ï¿½ dï¿½veloppement'))));
 
 select R.TEXTE_REP 
     from TP2_REPONSE_UTILISATEUR R, TP2_CHOIX_REPONSE C
@@ -292,7 +311,7 @@ select R.TEXTE_REP
                                                           where Q.CODE_TYPE_QUESTION = T.CODE_TYPE_QUESTION 
                                                           and Q.CODE_TYPE_QUESTION = (select CODE_TYPE_QUESTION 
                                                                                       from TP2_TYPE_QUESTION 
-                                                                                      where DESC_TYPE_QUE = 'À développement')));
+                                                                                      where DESC_TYPE_QUE = 'ï¿½ dï¿½veloppement')));
                                                                                       
 select TEXTE_REP 
     from TP2_REPONSE_UTILISATEUR R
@@ -305,7 +324,7 @@ select TEXTE_REP
                                     and exists (select CODE_TYPE_QUESTION
                                                     from TP2_TYPE_QUESTION T
                                                     where Q.CODE_TYPE_QUESTION = T.CODE_TYPE_QUESTION 
-                                                    and  DESC_TYPE_QUE = 'À développement')));
+                                                    and  DESC_TYPE_QUE = 'ï¿½ dï¿½veloppement')));
  
  --i                                                   
 select U.PRENOM_UTI || ' ' || U.NOM_UTI as NOM_COMPLET, S.TITRE_SON as NOM_SONDAGE, count(R.NO_UTILISATEUR) as NB_REPONSE
@@ -374,7 +393,7 @@ create or replace view VUE_ENTREPRISE as
 
 select * from VUE_ENTREPRISE;
 
-/*Il n'est pas possible d'ajouter un enregistrement dans Oracle car la vue est automatiquement mise à jour par l'utilisateur à la moindre modification de la table. Il n'y a donc aucun enrgistrement qui ne peut être effectuée.*/
+/*Il n'est pas possible d'ajouter un enregistrement dans Oracle car la vue est automatiquement mise ï¿½ jour par l'utilisateur ï¿½ la moindre modification de la table. Il n'y a donc aucun enrgistrement qui ne peut ï¿½tre effectuï¿½e.*/
 
 --n 
 delete from TP2_UTILISATEUR_PROJET
