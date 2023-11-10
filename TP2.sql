@@ -217,8 +217,8 @@ insert into TP2_PROFIL_ACCESSIBILITE (THEME_PROF, CODE_PROJET) values ('Sith', '
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (666, 004587, 036259);
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL, HAUTEUR_IMA, LARGEUR_IMA) values (667, 004587, 036259);
 
-insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (100, 'Porte cachï¿½e' , 'Vue porte cachï¿½e ouest corridor jardin' , 8, 25);
-insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (102, 'La voute de Chtulhu' , 'Vue entrï¿½e nord citï¿½ R''lyeh avec voute' , 4, 6);
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (100, 'Porte cachï¿½e' , 'Vue porte cachï¿½e ouest côté mer' , 8, 25);
+insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE, NOM_I_COO, DESC_CO, POSITION_X_COO, POSITION_Y_COO) values (102, 'La voute de Chtulhu' , 'Vue entrï¿½e sud citï¿½ R''lyeh' , 4, 6);
 
 insert into TP2_PROFIL_ACCESSIBILITE_PLAN (NO_PROFIL, HAUTEUR_PLA, LARGEUR_PLA) values (666, 50, 100);
 insert into TP2_PROFIL_ACCESSIBILITE_PLAN (NO_PROFIL, HAUTEUR_PLA, LARGEUR_PLA) values (667, 1080, 1920);
@@ -229,7 +229,7 @@ insert into TP2_PROFIL_ACCESSIBILITE_PLAN_COORDONNEE (NO_PLAN, LONGITUDE_COO, LA
 insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
 insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Chewbacca', 'A1B2');
 insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('2000-01-01', 'YYYY-MM-DD'), to_date('2000-04-01', 'YYYY-MM-DD'), to_date('2000-04-30', 'YYYY-MM-DD'), 'ï¿½valuez votre niveau de satisfaction de l''accï¿½s ï¿½ la salle du trï¿½ne.', 'A1B2');
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('1926-05-11', 'YYYY-MM-DD'), to_date('1928-02-26', 'YYYY-MM-DD'), to_date('1929-02-26', 'YYYY-MM-DD'), 'Quel(s) mode(s) de transport prï¿½voyez-vous utiliser pour vous rendre au lieu de dormance de Chtulu?', 'C3D4');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('1926-05-11', 'YYYY-MM-DD'), to_date('1928-02-26', 'YYYY-MM-DD'), to_date('1929-02-26', 'YYYY-MM-DD'), 'Quel(s) mode(s) de transport voulez-vous utiliser pour vous rendre au lieu de dormance de Chtulu?', 'C3D4');
 
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('MC04', 'Multiples choices with 4 options');
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('EQ22', 'Explanation questions');
@@ -255,14 +255,21 @@ insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL)
 
 -- d
 delete from TP2_REPONSE_UTILISATEUR 
-    where NO_UTILISATEUR in (select U.NO_UTILISATEUR
-                                from TP2_UTILISATEUR U
-                                join TP2_UTILISATEUR_PROJET P ON U.NO_UTILISATEUR = P.NO_UTILISATEUR
-                                join TP2_SONDAGE S ON P.CODE_PROJET = S.CODE_PROJET
+    where NO_UTILISATEUR in (select distinct R.NO_UTILISATEUR
+                                from TP2_REPONSE_UTILISATEUR R
+                                inner join TP2_CHOIX_REPONSE C ON R.ID_CHOIX_REPONSE = C.ID_CHOIX_REPONSE
+                                inner join TP2_QUESTION Q ON C.ID_QUESTION = Q.ID_QUESTION
+                                inner join TP2_SONDAGE S ON Q.NO_SONDAGE = S.NO_SONDAGE
                                 where sysdate - interval '6' month > S.DATE_FIN_SON);
 
-delete from TP2_REPONSE_UTILISATEUR
-    where ID_CHOIX_REPONSE is null;
+delete from TP2_UTILISATEUR 
+    where NO_UTILISATEUR in (select distinct R.NO_UTILISATEUR
+                                from TP2_REPONSE_UTILISATEUR R
+                                inner join TP2_CHOIX_REPONSE C ON R.ID_CHOIX_REPONSE = C.ID_CHOIX_REPONSE
+                                inner join TP2_QUESTION Q ON C.ID_QUESTION = Q.ID_QUESTION
+                                inner join TP2_SONDAGE S ON Q.NO_SONDAGE = S.NO_SONDAGE
+                                where sysdate - interval '6' month > S.DATE_FIN_SON
+                                and R.ID_CHOIX_REPONSE is null);
                                 
 -- e
 insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (ID_QUESTION_SEQ.nextval, 003, 'EQ22', 'En route vers lan 3000', 5000);
@@ -286,7 +293,7 @@ select Q.ORDRE_QUESTION, Q.TEXTE_QUE
     inner join TP2_SONDAGE S on Q.NO_SONDAGE = S.NO_SONDAGE
     where extract(year from S.DATE_CREATION_SON) = 2023
     and extract(month from S.DATE_CREATION_SON) = 9
-    order by S.NO_SONDAGE, Q.ORDRE_QUESTION;
+    order by S.NO_SONDAGE asc, Q.ORDRE_QUESTION asc;
 
     
 -- h
@@ -387,13 +394,30 @@ select COURRIEL_UTI
 
 --m
 drop view VUE_ENTREPRISE;
+/*create or replace view VUE_ENTREPRISE as 
+with ENTREPRISE as (select distinct NO_ENTREPRISE, NOM_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, 1 as Niveau
+                                      from TP2_ENTREPRISE
+                                      where NO_ENTREPRISE_DIRIGEANTE is null
+                                      union all
+                                      select E.NO_ENTREPRISE, E.NOM_ENT, E.CODE_POSTAL_ENT, E.VILLE_ENT, E.COURRIEL_ENT, H.Niveau + 1
+                                          from TP2_ENTREPRISE E
+                                          join ENTREPRISE H on H.NO_ENTREPRISE_DIRIGEANTE = E.NO_ENTREPRISE)
+                                          select NO_ENTREPRISE, NOM_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, 
+                                          concat(repeat('   ', Niveau - 1), COURRIEL_ENT) AS Chemin, Niveau
+                                              from ENTREPRISE;
+
+select NOM_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT from VUE_ENTREPRISE;*/
+
 create or replace view VUE_ENTREPRISE as 
     select distinct NOM_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT
         from TP2_ENTREPRISE;
 
 select * from VUE_ENTREPRISE;
 
-/*Il n'est pas possible d'ajouter un enregistrement dans Oracle car la vue est automatiquement mise ï¿½ jour par l'utilisateur ï¿½ la moindre modification de la table. Il n'y a donc aucun enrgistrement qui ne peut ï¿½tre effectuï¿½e.*/
+
+/*Il n'est pas possible d'ajouter un enregistrement dans Oracle car la vue est automatiquement mise ï¿½ jour par l'utilisateur ï¿½ la moindre modification de la table. 
+Une modification faite directement à travers une vue hiérarchique peut poser des problèmes car il peut être difficile de déterminer comment les changements effectués peuvent affectuer la structure de la hiérarchie.
+Ainsi, pour des raisons de sécurité, il n'est pas possible d'enregistrer une vue.*/
 
 --n 
 delete from TP2_UTILISATEUR_PROJET
