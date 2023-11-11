@@ -172,11 +172,7 @@ create table TP2_REPONSE_UTILISATEUR (
     NO_UTILISATEUR number(6) not null,
     ID_CHOIX_REPONSE number(6) not null,
     TEXTE_REP varchar2(1000) not null,
-    constraint PK_REPONSE_UTILISATEUR primary key(NO_UTILISATEUR, ID_CHOIX_REPONSE),
-    constraint FK_NO_UTILISATEUR foreign key(NO_UTILISATEUR)
-        references TP2_UTILISATEUR(NO_UTILISATEUR),
-    constraint FK_RU_ID_CHOIX_REPONSE foreign key(ID_CHOIX_REPONSE)
-        references TP2_CHOIX_REPONSE(ID_CHOIX_REPONSE));
+    constraint PK_REPONSE_UTILISATEUR primary key(NO_UTILISATEUR, ID_CHOIX_REPONSE));
         
 create or replace view TP2_ADMINISTRATEUR (COURRIEL_ADM, MOT_DE_PASSE_ADM, NOM_ADM, PRENOM_ADM) as
     select COURRIEL_UTI, MOT_DE_PASSE_UTI, NOM_UTI, PRENOM_UTI 
@@ -213,13 +209,13 @@ insert into TP2_PROFIL_ACCESSIBILITE_PLAN (NO_PROFIL, HAUTEUR_PLA, LARGEUR_PLA) 
 insert into TP2_PROFIL_ACCESSIBILITE_PLAN_COORDONNEE (NO_PLAN, LONGITUDE_COO, LATITUDE_COO) values (1, 48.804568, 2.121241);
 insert into TP2_PROFIL_ACCESSIBILITE_PLAN_COORDONNEE (NO_PLAN, LONGITUDE_COO, LATITUDE_COO) values (2, -47.15, -126.716666);
 
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Order 66', 'A1B2');
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('23-09-08','RR-MM-DD'), to_date('23-11-11','RR-MM-DD'), to_date('23-12-12','RR-MM-DD'), 'Chewbacca', 'A1B2');
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('2000-01-01', 'YYYY-MM-DD'), to_date('2000-04-01', 'YYYY-MM-DD'), to_date('2000-04-30', 'YYYY-MM-DD'), 'Évaluez votre niveau de satisfaction de l''accès à la salle du trône.', 'A1B2');
-insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('1926-05-11', 'YYYY-MM-DD'), to_date('1928-02-26', 'YYYY-MM-DD'), to_date('1929-02-26', 'YYYY-MM-DD'), 'Quel(s) mode(s) de transport prévoyez-vous utiliser pour vous rendre au lieu de dormance de Chtulu?', 'C3D4');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('2023-09-08','RRRR-MM-DD'), to_date('2023-11-11','RRRR-MM-DD'), to_date('2023-12-12','RRRR-MM-DD'), 'Order 66', 'A1B2');
+insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('2023-09-08','RRRR-MM-DD'), to_date('2023-11-11','RRRR-MM-DD'), to_date('2023-12-12','RRRR-MM-DD'), 'Chewbacca', 'A1B2');
+--insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('2000-01-01', 'YYYY-MM-DD'), to_date('2000-04-01', 'YYYY-MM-DD'), to_date('2000-04-30', 'YYYY-MM-DD'), 'Évaluez votre niveau de satisfaction de l''accès à la salle du trône.', 'A1B2');
+--insert into TP2_SONDAGE (NO_SONDAGE, DATE_CREATION_SON, DATE_DEBUT_SON, DATE_FIN_SON, TITRE_SON, CODE_PROJET) values (TP2_NO_SONDAGE_SEQ.nextval, to_date('1926-05-11', 'YYYY-MM-DD'), to_date('1928-02-26', 'YYYY-MM-DD'), to_date('1929-02-26', 'YYYY-MM-DD'), 'Quel(s) mode(s) de transport prévoyez-vous utiliser pour vous rendre au lieu de dormance de Chtulu?', 'C3D4');
 
-insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('MC04', 'Multiples choices with 4 options');
-insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('EQ22', 'Explanation questions');
+insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('MC04', 'Choix multiples avec 4 options');
+insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('EQ22', 'Explication questions');
 insert into TP2_TYPE_QUESTION (CODE_TYPE_QUESTION, DESC_TYPE_QUE) values ('RB11', 'À développement');
 
 insert into TP2_QUESTION (ID_QUESTION, ORDRE_QUESTION, CODE_TYPE_QUESTION, TEXTE_QUE, NO_SONDAGE) values (ID_QUESTION_SEQ.nextval, 002, 'MC04', 'Which jedi survives order 66', 5200);
@@ -237,7 +233,7 @@ insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP
 
 -- c
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE (NO_PROFIL)
-    select NO_PROFIL
+    select *
         from TP2_PROFIL_ACCESSIBILITE_PLAN
         where NO_PROFIL = 12;
 
@@ -352,6 +348,27 @@ select NOM_ENT
                           
 --k
 
+--m
+col NOM_ENTREPRISE format a40
+col VILLE format a40
+col CHEMIN format a80
+
+create or replace view TP2_VUE_HIERARCHIE_ENTREPRISE (NOM_ENTREPRISE, CODE_POSTAL, VILLE, CHEMIN, NIVEAU) as 
+    select lpad(' ', LEVEL * 2, ' ') || NOM_ENT,
+            CODE_POSTAL_ENT,
+            VILLE_ENT,
+            sys_connect_by_path(COURRIEL_ENT, '/'),
+            level 
+        from TP2_ENTREPRISE
+        connect by prior NO_ENTREPRISE = NO_ENTREPRISE_DIRIGEANTE
+        start with NO_ENTREPRISE_DIRIGEANTE is null;
+        
+select * from TP2_VUE_HIERARCHIE_ENTREPRISE;
+
+--insert into TP2_VUE_HIERARCHIE_ENTREPRISE (NOM_ENTREPRISE, CODE_POSTAL, VILLE) values ('Cartel hutt', 'J3D 7Y4', 'Kor Vella')
+/* 1)m)iii) (1) Non, nous ne pouvons pas ajouter un enregistrement à partir de la vue.
+            (2) On ne respecte pas les contraintes d'intégrité de la table associée TP2_ENTREPRISE, c'est-à-dire, les not null (tous les champs doivent être remplis) et la PK qui est obligatoire
+*/
 
 --2
 --a
@@ -452,3 +469,18 @@ end TP2_SP_ARCHIVER_SONDAGE;
 /
 
 execute TP2_SP_ARCHIVER_SONDAGE(to_date('2020-01-01', 'YYYY-MM-DD'));
+
+
+
+
+--3
+--a
+NOM_PROJET
+NOM PRENOM EMP
+NOM_ENT
+DATE_CREA_SON
+--i)
+
+--ii)
+
+--iii)
