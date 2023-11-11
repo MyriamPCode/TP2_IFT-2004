@@ -1,3 +1,5 @@
+set SERVEROUTPUT ON
+
 drop table TP2_UTILISATEUR cascade constraints;
 drop table TP2_ENTREPRISE cascade constraints;
 drop table TP2_PROJET cascade constraints;
@@ -12,6 +14,9 @@ drop table TP2_TYPE_QUESTION cascade constraints;
 drop table TP2_QUESTION cascade constraints;
 drop table TP2_CHOIX_REPONSE cascade constraints;
 drop table TP2_REPONSE_UTILISATEUR cascade constraints;
+drop table TP2_SONDAGE_ARCHIVE cascade constraints;
+drop table TP2_QUESTION_ARCHIVE cascade constraints;
+drop table TP2_CHOIX_REPONSE_ARCHIVE cascade constraints;
 
 drop sequence NO_UTILISATEUR_SEQ;
 drop sequence TP2_NO_SONDAGE_SEQ;
@@ -43,7 +48,9 @@ create table TP2_ENTREPRISE (
     VILLE_ENT varchar2(40) not null,
     COURRIEL_ENT varchar2(40) not null,
     NO_ENTREPRISE_DIRIGEANTE number(6) null,
-    constraint PK_ENTREPRISE primary key(NO_ENTREPRISE));
+    constraint PK_ENTREPRISE primary key(NO_ENTREPRISE),
+    constraint FK_ENT_NO_ENT_DIRI foreign key (NO_ENTREPRISE_DIRIGEANTE)
+        references TP2_ENTREPRISE(NO_ENTREPRISE));
     
 create table TP2_PROJET (
     CODE_PROJET char(4) not null,
@@ -51,7 +58,7 @@ create table TP2_PROJET (
     NOM_PRO varchar2(40) null,
     NO_ENTREPRISE number(6) not null,
     constraint PK_PROJET primary key(CODE_PROJET),
-    constraint FK_PROJET foreign key(NO_ENTREPRISE)
+    constraint FK_PRO_NO_ENTREPRISE foreign key(NO_ENTREPRISE)
         references TP2_ENTREPRISE(NO_ENTREPRISE));
     
 create table TP2_UTILISATEUR_PROJET (
@@ -60,7 +67,7 @@ create table TP2_UTILISATEUR_PROJET (
     constraint PK_UTILISATEUR_PROJET primary key(NO_UTILISATEUR,CODE_PROJET),
     constraint FK_UTILISATEUR_PROJET_UTILISATEUR foreign key(NO_UTILISATEUR)
         references TP2_UTILISATEUR(NO_UTILISATEUR),
-    constraint FK_UTILISATEUR_PROJET_PROJET foreign key(CODE_PROJET)
+    constraint FK_UTIPRO_CODE_PROJET foreign key(CODE_PROJET)
         references TP2_PROJET(CODE_PROJET));
     
 create table TP2_PROFIL_ACCESSIBILITE (
@@ -80,7 +87,7 @@ create table TP2_PROFIL_ACCESSIBILITE_IMAGE (
     HAUTEUR_IMA number(6) not null,
     LARGEUR_IMA number(6) not null,
     constraint PK_PROFIL_ACCESSIBILITE_IMAGE primary key(NO_IMAGE),
-    constraint FK_PROFIL_ACCESSIBILITE_IMAGE foreign key(NO_PROFIL)
+    constraint FK_PAIMAGE_NO_PROFIL foreign key(NO_PROFIL)
         references TP2_PROFIL_ACCESSIBILITE(NO_PROFIL));
 
 create table TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (
@@ -141,9 +148,9 @@ create table TP2_QUESTION (
     TEXTE_QUE varchar2(100) not null,
     NO_SONDAGE number(8) not null,
     constraint PK_QUESTION primary key(ID_QUESTION),
-    constraint FK_CODE_TYPE_QUESTION foreign key(CODE_TYPE_QUESTION)
+    constraint FK_QUE_CODE_TYPE_QUESTION foreign key(CODE_TYPE_QUESTION)
         references TP2_TYPE_QUESTION(CODE_TYPE_QUESTION),
-    constraint FK_NO_SONDAGE foreign key(NO_SONDAGE)
+    constraint FK_QUE_NO_SONDAGE foreign key(NO_SONDAGE)
         references TP2_SONDAGE(NO_SONDAGE));
     
 create sequence ID_QUESTION_SEQ
@@ -155,7 +162,7 @@ create table TP2_CHOIX_REPONSE (
     TEXTE_CHO varchar2(100) not null,
     ID_QUESTION number(6) not null,
     constraint PK_CHOIX_REPONSE primary key(ID_CHOIX_REPONSE),
-    constraint FK_ID_QUESTION foreign key(ID_QUESTION)
+    constraint FK_CR_ID_QUESTION foreign key(ID_QUESTION)
         references TP2_QUESTION(ID_QUESTION));
         
 create sequence ID_CHOIX_REPONSE_SEQ
@@ -168,7 +175,7 @@ create table TP2_REPONSE_UTILISATEUR (
     constraint PK_REPONSE_UTILISATEUR primary key(NO_UTILISATEUR, ID_CHOIX_REPONSE),
     constraint FK_NO_UTILISATEUR foreign key(NO_UTILISATEUR)
         references TP2_UTILISATEUR(NO_UTILISATEUR),
-    constraint FK_ID_CHOIX_REPONSE foreign key(ID_CHOIX_REPONSE)
+    constraint FK_RU_ID_CHOIX_REPONSE foreign key(ID_CHOIX_REPONSE)
         references TP2_CHOIX_REPONSE(ID_CHOIX_REPONSE));
         
 create or replace view TP2_ADMINISTRATEUR (COURRIEL_ADM, MOT_DE_PASSE_ADM, NOM_ADM, PRENOM_ADM) as
@@ -182,7 +189,7 @@ insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRE
 insert into TP2_UTILISATEUR (NO_UTILISATEUR, COURRIEL_UTI, MOT_DE_PASSE_UTI, PRENOM_UTI, NOM_UTI, TYPE_UTI) values (NO_UTILISATEUR_SEQ.nextval, 'anahno.mistvale@gmail.com', 'motDePasse', 'Anahno', 'Mistvale', 'administrateur');
 
 insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values ('King''s council', 'C:\User\Trym\KingsConcil\logo.jpg', '1 king avenue', 'R1K 1C1', 'Rexxentrum', 'king.council@gmail.com');
-insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT) values ('Cobalt Soul', 'C:\User\Anahno\CobaltSoul\logo.jpg', '32 soul avenue', 'C0B 1S0', 'Zadash', 'cobalt.soul@gmail.com');
+insert into TP2_ENTREPRISE (NOM_ENT, NOM_FICHIER_LOGO_ENT, ADRESSE_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, NO_ENTREPRISE_DIRIGEANTE) values ('Cobalt Soul', 'C:\User\Anahno\CobaltSoul\logo.jpg', '32 soul avenue', 'C0B 1S0', 'Zadash', 'cobalt.soul@gmail.com', 1);
 
 insert into TP2_PROJET (CODE_PROJET, DATE_PRO, NOM_PRO, NO_ENTREPRISE) values ('A1B2', to_date('23-11-07','RR-MM-DD'), 'Order 66', 1);
 insert into TP2_PROJET (CODE_PROJET, DATE_PRO, NOM_PRO, NO_ENTREPRISE) values ('C3D4', to_date('23-11-07','RR-MM-DD'), 'Projet Nemesis', 2);
@@ -346,4 +353,102 @@ select NOM_ENT
 --k
 
 
+--2
+--a
+create or replace trigger TP2_TRG_AIU_ORDRE_QUESTION
+    after insert or update of ORDRE_QUESTION on TP2_QUESTION
+declare
+    V_MEME_ORDRE_TROUVE number(1);
+begin
+select max(count(*))
+    into V_MEME_ORDRE_TROUVE
+    from TP2_QUESTION
+    group by NO_SONDAGE, ORDRE_QUESTION; 
+                                    
+if V_MEME_ORDRE_TROUVE > 1 then
+    raise_application_error(-20000,'Deux questions ne peuvent pas avoir le même ordre');
+end if;
+end TRG_AIU_ORDRE_QUESTION;
+/
 
+
+--b
+create table TP2_SONDAGE_ARCHIVE (
+    NO_SONDAGE number(8) not null, 
+    DATE_CREATION_SON date not null, 
+    DATE_DEBUT_SON date null, 
+    DATE_FIN_SON date null, 
+    TITRE_SON varchar2(100) not null, 
+    CODE_PROJET char(4) not null,
+    constraint PK_SONDAGE_ARCHIVE primary key (NO_SONDAGE),
+    constraint TP2_AK_SONARCH_TITRE_SON unique (TITRE_SON));
+    
+create table TP2_QUESTION_ARCHIVE (
+    ID_QUESTION number(6) not null,
+    ORDRE_QUESTION number(3) default 001 not null,
+    CODE_TYPE_QUESTION char(4) not null,
+    TEXTE_QUE varchar2(100) not null,
+    NO_SONDAGE number(8) not null,
+    constraint PK_QUESTION_ARCHIVE primary key(ID_QUESTION),
+    constraint FK_SONARCH_NO_SONDAGE foreign key(NO_SONDAGE)
+        references TP2_SONDAGE_ARCHIVE(NO_SONDAGE));
+    
+create table TP2_CHOIX_REPONSE_ARCHIVE (
+    ID_CHOIX_REPONSE number(6) not null,
+    ORDRE_REPONSE number(3) not null,
+    TEXTE_CHO varchar2(100) not null,
+    ID_QUESTION number(6) not null,
+    constraint PK_CHOIX_REPONSE_ARCHIVE primary key(ID_CHOIX_REPONSE),
+    constraint FK_CHOARCH_ID_QUESTION foreign key(ID_QUESTION)
+        references TP2_QUESTION_ARCHIVE(ID_QUESTION));
+        
+create or replace procedure TP2_SP_ARCHIVER_SONDAGE(P_DATE in date) is 
+    E_DATE_PLUS_PETIT_3_ANS exception;
+begin
+if P_DATE > add_months(sysdate, -12*3) then
+    raise E_DATE_PLUS_PETIT_3_ANS;
+end if;
+
+insert into TP2_SONDAGE_ARCHIVE
+    select *
+    from TP2_SONDAGE
+    where DATE_FIN_SON < P_DATE;
+
+insert into TP2_QUESTION_ARCHIVE
+    select *
+    from TP2_QUESTION
+    where NO_SONDAGE in (select NO_SONDAGE
+                            from TP2_SONDAGE
+                            where DATE_FIN_SON < P_DATE);
+
+insert into TP2_CHOIX_REPONSE_ARCHIVE
+    select *
+    from TP2_CHOIX_REPONSE
+    where ID_QUESTION in (select ID_QUESTION
+                            from TP2_QUESTION
+                            where NO_SONDAGE in (select NO_SONDAGE
+                                                from TP2_SONDAGE
+                                                where DATE_FIN_SON < P_DATE));
+
+delete from TP2_CHOIX_REPONSE
+    where ID_QUESTION in (select ID_QUESTION
+                            from TP2_QUESTION
+                            where NO_SONDAGE in (select NO_SONDAGE
+                                                from TP2_SONDAGE
+                                                where DATE_FIN_SON < P_DATE));
+delete from TP2_QUESTION
+    where NO_SONDAGE in (select NO_SONDAGE
+                            from TP2_SONDAGE
+                            where DATE_FIN_SON < P_DATE);
+                            
+delete from TP2_SONDAGE
+    where DATE_FIN_SON < P_DATE;
+
+
+exception
+    when E_DATE_PLUS_PETIT_3_ANS then
+        dbms_output.put_line('La date doit être plus vieille qu''il y a 3 ans.');
+end TP2_SP_ARCHIVER_SONDAGE;
+/
+
+execute TP2_SP_ARCHIVER_SONDAGE(to_date('2020-01-01', 'YYYY-MM-DD'));
