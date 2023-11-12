@@ -382,31 +382,28 @@ select COURRIEL_UTI
     and COURRIEL_UTI in (select COURRIEL_ENT from TP2_ENTREPRISE);
 
 --m
-drop view VUE_ENTREPRISE;
-/*create or replace view VUE_ENTREPRISE as 
-with ENTREPRISE as (select distinct NO_ENTREPRISE, NOM_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, 1 as Niveau
-                                      from TP2_ENTREPRISE
-                                      where NO_ENTREPRISE_DIRIGEANTE is null
-                                      union all
-                                      select E.NO_ENTREPRISE, E.NOM_ENT, E.CODE_POSTAL_ENT, E.VILLE_ENT, E.COURRIEL_ENT, H.Niveau + 1
-                                          from TP2_ENTREPRISE E
-                                          join ENTREPRISE H on H.NO_ENTREPRISE_DIRIGEANTE = E.NO_ENTREPRISE)
-                                          select NO_ENTREPRISE, NOM_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT, 
-                                          concat(repeat('   ', Niveau - 1), COURRIEL_ENT) AS Chemin, Niveau
-                                              from ENTREPRISE;
+col NOM_ENTREPRISE format a40
+col VILLE format a40
+col CHEMIN format a80
 
-select NOM_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT from VUE_ENTREPRISE;*/
+create or replace view TP2_VUE_HIERARCHIE_ENTREPRISE (NOM_ENTREPRISE, CODE_POSTAL, VILLE, CHEMIN, NIVEAU) as 
+    select lpad(' ', LEVEL * 2, ' ') || NOM_ENT,
+            CODE_POSTAL_ENT,
+            VILLE_ENT,
+            sys_connect_by_path(COURRIEL_ENT, '/'),
+            level 
+        from TP2_ENTREPRISE
+        connect by prior NO_ENTREPRISE = NO_ENTREPRISE_DIRIGEANTE
+        start with NO_ENTREPRISE_DIRIGEANTE is null;
+        
+select * from TP2_VUE_HIERARCHIE_ENTREPRISE;
 
-create or replace view VUE_ENTREPRISE as 
-    select distinct NOM_ENT, CODE_POSTAL_ENT, VILLE_ENT, COURRIEL_ENT
-        from TP2_ENTREPRISE;
+--insert into TP2_VUE_HIERARCHIE_ENTREPRISE (NOM_ENTREPRISE, CODE_POSTAL, VILLE) values ('Cartel hutt', 'J3D 7Y4', 'Kor Vella')
 
-select * from VUE_ENTREPRISE;
+/* 1)m)iii) (1) Non, il n'est pas possible d'ajouter un enregistrement à partir de la vue.
+            (2) On ne respecte pas les contraintes d'intégrité de la table associée TP2_ENTREPRISE, c'est-à-dire, les not null (tous les champs doivent être remplis) et la PK qui est obligatoire
+*/
 
-
-/*Il n'est pas possible d'ajouter un enregistrement dans Oracle car la vue est automatiquement mise ï¿½ jour par l'utilisateur ï¿½ la moindre modification de la table. 
-Une modification faite directement à travers une vue hiérarchique peut poser des problèmes car il peut être difficile de déterminer comment les changements effectués peuvent affectuer la structure de la hiérarchie.
-Ainsi, pour des raisons de sécurité, il n'est pas possible d'enregistrer une vue.*/
 
 --n 
 delete from TP2_UTILISATEUR_PROJET
@@ -474,24 +471,24 @@ create table TP2_CHOIX_REPONSE_ARCHIVE (
     constraint FK_CHOARCH_ID_QUESTION foreign key(ID_QUESTION)
         references TP2_QUESTION_ARCHIVE(ID_QUESTION));
         
-create or replace procedure TP2_SP_ARCHIVER_SONDAGE(P_DATE in date) is 
+create or replace procedure TP2_SP_ARCHIVER_SONDAGE(PI_DATE in date) is 
     E_DATE_PLUS_PETIT_3_ANS exception;
 begin
-if P_DATE > add_months(sysdate, -12*3) then
+if PI_DATE > add_months(sysdate, -12*3) then
     raise E_DATE_PLUS_PETIT_3_ANS;
 end if;
 
 insert into TP2_SONDAGE_ARCHIVE
     select *
     from TP2_SONDAGE
-    where DATE_FIN_SON < P_DATE;
+    where DATE_FIN_SON < PI_DATE;
 
 insert into TP2_QUESTION_ARCHIVE
     select *
     from TP2_QUESTION
     where NO_SONDAGE in (select NO_SONDAGE
                             from TP2_SONDAGE
-                            where DATE_FIN_SON < P_DATE);
+                            where DATE_FIN_SON < PI_DATE);
 
 insert into TP2_CHOIX_REPONSE_ARCHIVE
     select *
@@ -500,21 +497,21 @@ insert into TP2_CHOIX_REPONSE_ARCHIVE
                             from TP2_QUESTION
                             where NO_SONDAGE in (select NO_SONDAGE
                                                 from TP2_SONDAGE
-                                                where DATE_FIN_SON < P_DATE));
+                                                where DATE_FIN_SON < PI_DATE));
 
 delete from TP2_CHOIX_REPONSE
     where ID_QUESTION in (select ID_QUESTION
                             from TP2_QUESTION
                             where NO_SONDAGE in (select NO_SONDAGE
                                                 from TP2_SONDAGE
-                                                where DATE_FIN_SON < P_DATE));
+                                                where DATE_FIN_SON < PI_DATE));
 delete from TP2_QUESTION
     where NO_SONDAGE in (select NO_SONDAGE
                             from TP2_SONDAGE
-                            where DATE_FIN_SON < P_DATE);
+                            where DATE_FIN_SON < PI_DATE);
                             
 delete from TP2_SONDAGE
-    where DATE_FIN_SON < P_DATE;
+    where DATE_FIN_SON < PI_DATE;
 
 
 exception
@@ -526,16 +523,17 @@ end TP2_SP_ARCHIVER_SONDAGE;
 execute TP2_SP_ARCHIVER_SONDAGE(to_date('2020-01-01', 'RRRR-MM-DD'));
 
 
+
 -- c
-create or replace function TP2_FCT_GENERER_MOT_DE_PASSE(NB_DIGITS in number) return varchar2 
+create or replace function TP2_FCT_GENERER_MOT_DE_PASSE(PI_NB_DIGITS in number) return varchar2 
 is
     V_PASSWORD varchar2(16);
-    V_LENGTH number(2) := NB_DIGITS;
+    V_LENGTH number(2) := PI_NB_DIGITS;
     E_DIGITS_INVALID exception;
 begin
-    if (NB_DIGITS < 12) then
+    if (PI_NB_DIGITS < 12) then
         V_LENGTH := 12;
-    elsif (NB_DIGITS > 16) then
+    elsif (PI_NB_DIGITS > 16) then
         raise E_DIGITS_INVALID;
     end if;
     
@@ -574,3 +572,16 @@ begin
             dbms_output.put_line(V_NO_UTILISATEUR + 'already answered sondage');   
 end TP2_TRG_BIU_DEJA_REPONDU;
 /
+
+--3
+--a
+NOM_PROJET
+NOM PRENOM EMP
+NOM_ENT
+DATE_CREA_SON
+DATE_FIN_SON
+--i)
+
+--ii)
+
+--iii)
