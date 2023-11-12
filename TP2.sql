@@ -409,20 +409,26 @@ select * from TP2_VUE_HIERARCHIE_ENTREPRISE;
 --n 
 delete from TP2_UTILISATEUR_PROJET
     where CODE_PROJET = 'C3D4';
+    
+/*Cette requête permet de supprimer les données la table TP2_UTILISATEUR_PROJET dont CODE_PROJET est 'C3D4'*/
 
 update TP2_UTILISATEUR_PROJET 
     set CODE_PROJET = 'C3D4'
     where CODE_PROJET = 'A1B2';
+    
+/*Cette requête permet de mettre à jour les données la table TP2_UTILISATEUR_PROJET en modifiant CODE_PROJET. Si CODE_PROJET= 'A1B2', celui sera remplacé par 'C3D4'*/
 
 insert into TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (NO_IMAGE)
     select NO_IMAGE
         from TP2_PROFIL_ACCESSIBILITE_IMAGE
         where NO_IMAGE = 666;
         
+/* Cette requête permet de copier l'image de profil d’accessibilité 666 dans une nouvelle image d'une certaine coordonnée de la même image.*/
+
 alter table TP2_UTILISATEUR
     add AGE_UTIL number(2) null;
 
-
+/*Cette requête ajouter une nouvelle colonne qui permet de rentrer comme donnée l'âge de l'utilisateur à la table TP2_UTILISATEUR. Cette colonne peut ne pas contenir obligatoirement de données*/
 --2
 --a
 create or replace trigger TP2_TRG_AIU_ORDRE_QUESTION
