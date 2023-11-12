@@ -34,7 +34,8 @@ create table TP2_UTILISATEUR (
     PRENOM_UTI varchar2(40) not null,
     NOM_UTI varchar2(40) not null,
     TYPE_UTI varchar2(14) not null,
-    constraint PK_UTILISATEUR primary key(NO_UTILISATEUR));
+    constraint TP2_PK_UTILISATEUR primary key(NO_UTILISATEUR),
+    constraint TP2_AK_UTI_COURRIEL_UTI unique (COURRIEL_UTI));
     
 create sequence TP2_NO_UTILISATEUR_SEQ
     start with 1000 increment by 5;
@@ -49,8 +50,8 @@ create table TP2_ENTREPRISE (
     VILLE_ENT varchar2(40) not null,
     COURRIEL_ENT varchar2(40) not null,
     NO_ENTREPRISE_DIRIGEANTE number(6) null,
-    constraint PK_ENTREPRISE primary key(NO_ENTREPRISE),
-    constraint FK_ENT_NO_ENT_DIRI foreign key (NO_ENTREPRISE_DIRIGEANTE)
+    constraint TP2_PK_ENTREPRISE primary key(NO_ENTREPRISE),
+    constraint TP2_FK_ENT_NO_ENT_DIRI foreign key (NO_ENTREPRISE_DIRIGEANTE)
         references TP2_ENTREPRISE(NO_ENTREPRISE));
     
 create table TP2_PROJET (
@@ -58,17 +59,17 @@ create table TP2_PROJET (
     DATE_PRO DATE not null,
     NOM_PRO varchar2(40) null,
     NO_ENTREPRISE number(6) not null,
-    constraint PK_PROJET primary key(CODE_PROJET),
-    constraint FK_PRO_NO_ENTREPRISE foreign key(NO_ENTREPRISE)
+    constraint TP2_PK_PROJET primary key(CODE_PROJET),
+    constraint TP2_FK_PRO_NO_ENTREPRISE foreign key(NO_ENTREPRISE)
         references TP2_ENTREPRISE(NO_ENTREPRISE));
 
 create table TP2_UTILISATEUR_PROJET (
     NO_UTILISATEUR number(6) not null,
     CODE_PROJET char(4) not null,
-    constraint PK_UTILISATEUR_PROJET primary key(NO_UTILISATEUR,CODE_PROJET),
-    constraint FK_UTIPRO_NO_UTILISATEUR foreign key(NO_UTILISATEUR)
+    constraint TP2_PK_UTILISATEUR_PROJET primary key(NO_UTILISATEUR,CODE_PROJET),
+    constraint TP2_FK_UTIPRO_NO_UTILISATEUR foreign key(NO_UTILISATEUR)
         references TP2_UTILISATEUR(NO_UTILISATEUR),
-    constraint FK_UTIPRO_CODE_PROJET foreign key(CODE_PROJET)
+    constraint TP2_FK_UTIPRO_CODE_PROJET foreign key(CODE_PROJET)
         references TP2_PROJET(CODE_PROJET));
     
 create table TP2_PROFIL_ACCESSIBILITE (
@@ -77,8 +78,8 @@ create table TP2_PROFIL_ACCESSIBILITE (
     THEME_PROF varchar2(40) null,
     TEXTE_PROF varchar2(40) null,
     CODE_PROJET char(4) not null,
-    constraint PK_PROFIL_ACCESSIBILITE primary key(NO_PROFIL),
-    constraint FK_PA_CODE_PROJET foreign key(CODE_PROJET)
+    constraint TP2_PK_PROFIL_ACCESSIBILITE primary key(NO_PROFIL),
+    constraint TP2_FK_PA_CODE_PROJET foreign key(CODE_PROJET)
         references TP2_PROJET(CODE_PROJET));
 
 create table TP2_PROFIL_ACCESSIBILITE_IMAGE (
@@ -87,8 +88,8 @@ create table TP2_PROFIL_ACCESSIBILITE_IMAGE (
     NO_PROFIL number(6) not null,
     HAUTEUR_IMA number(6) not null,
     LARGEUR_IMA number(6) not null,
-    constraint PK_PROFIL_ACCESSIBILITE_IMAGE primary key(NO_IMAGE),
-    constraint FK_PAIMAGE_NO_PROFIL foreign key(NO_PROFIL)
+    constraint TP2_PK_PROFIL_ACCESSIBILITE_IMAGE primary key(NO_IMAGE),
+    constraint TP2_FK_PAIMAGE_NO_PROFIL foreign key(NO_PROFIL)
         references TP2_PROFIL_ACCESSIBILITE(NO_PROFIL));
 
 create table TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (
@@ -97,8 +98,8 @@ create table TP2_PROFIL_ACCESSIBILITE_IMAGE_COORDONNEE (
     DESC_CO varchar2(40) not null, 
     POSITION_X_COO number(6) not null, 
     POSITION_Y_COO number(6) not null,
-    constraint PK_PROFIL_ACCESS_IM_COORDONNEE primary key (NO_IMAGE, NOM_I_COO),
-    constraint FK_PAIMCOO_NO_IMAGE foreign key (NO_IMAGE)
+    constraint TP2_PK_PROFIL_ACCESS_IM_COORDONNEE primary key (NO_IMAGE, NOM_I_COO),
+    constraint TP2_FK_PAIMCOO_NO_IMAGE foreign key (NO_IMAGE)
         references TP2_PROFIL_ACCESSIBILITE_IMAGE(NO_IMAGE));
 
 create table TP2_PROFIL_ACCESSIBILITE_PLAN (
@@ -107,8 +108,8 @@ create table TP2_PROFIL_ACCESSIBILITE_PLAN (
     NO_PROFIL number(6) not null, 
     HAUTEUR_PLA number(6) not null, 
     LARGEUR_PLA number(6) not null,
-    constraint PK_PROFIL_ACCESS_PLAN primary key (NO_PLAN),
-    constraint FK_PAPLAN_NO_PROFIL foreign key (NO_PROFIL)
+    constraint TP2_PK_PROFIL_ACCESS_PLAN primary key (NO_PLAN),
+    constraint TP2_FK_PAPLAN_NO_PROFIL foreign key (NO_PROFIL)
         references TP2_PROFIL_ACCESSIBILITE(NO_PROFIL));
 
 create table TP2_PROFIL_ACCESSIBILITE_PLAN_COORDONNEE (
@@ -118,7 +119,7 @@ create table TP2_PROFIL_ACCESSIBILITE_PLAN_COORDONNEE (
     LONGITUDE_COO number(9,6) not null, 
     LATITUDE_COO number(9,6) not null,
     constraint TP2_PK_PROFIL_ACCESS_PLAN_COORDONNEE primary key (NO_P_COO),
-    constraint TP2_FK_PAPCOO_NO_PLAN foreign key (NO_PLAN)
+    constraint TP2_FK_PAPLANCOO_NO_PLAN foreign key (NO_PLAN)
         references TP2_PROFIL_ACCESSIBILITE_PLAN(NO_PLAN));
 
  create table TP2_SONDAGE (
@@ -128,8 +129,8 @@ create table TP2_PROFIL_ACCESSIBILITE_PLAN_COORDONNEE (
     DATE_FIN_SON date null, 
     TITRE_SON varchar2(100) not null, 
     CODE_PROJET char(4) not null,
-    constraint PK_SONDAGE primary key (NO_SONDAGE),
-    constraint FK_SON_CODE_PROJET foreign key (CODE_PROJET)
+    constraint TP2_PK_SONDAGE primary key (NO_SONDAGE),
+    constraint TP2_FK_SON_CODE_PROJET foreign key (CODE_PROJET)
         references TP2_PROJET(CODE_PROJET),
     constraint TP2_AK_SON_TITRE_SON unique (TITRE_SON));
 
@@ -140,7 +141,7 @@ create sequence TP2_NO_SONDAGE_SEQ
 create table TP2_TYPE_QUESTION (
     CODE_TYPE_QUESTION char(4) not null,
     DESC_TYPE_QUE varchar2(40) not null,
-    constraint PK_TYPE_QUESTION primary key(CODE_TYPE_QUESTION));
+    constraint TP2_PK_TYPE_QUESTION primary key(CODE_TYPE_QUESTION));
      
 create table TP2_QUESTION (
     ID_QUESTION number(6) not null,
@@ -148,10 +149,10 @@ create table TP2_QUESTION (
     CODE_TYPE_QUESTION char(4) not null,
     TEXTE_QUE varchar2(100) not null,
     NO_SONDAGE number(8) not null,
-    constraint PK_QUESTION primary key(ID_QUESTION),
-    constraint FK_QUE_CODE_TYPE_QUESTION foreign key(CODE_TYPE_QUESTION)
+    constraint TP2_PK_QUESTION primary key(ID_QUESTION),
+    constraint TP2_FK_QUE_CODE_TYPE_QUESTION foreign key(CODE_TYPE_QUESTION)
         references TP2_TYPE_QUESTION(CODE_TYPE_QUESTION),
-    constraint FK_QUE_NO_SONDAGE foreign key(NO_SONDAGE)
+    constraint TP2_FK_QUE_NO_SONDAGE foreign key(NO_SONDAGE)
         references TP2_SONDAGE(NO_SONDAGE));
     
 create sequence TP2_ID_QUESTION_SEQ
@@ -162,8 +163,8 @@ create table TP2_CHOIX_REPONSE (
     ORDRE_REPONSE number(3) not null,
     TEXTE_CHO varchar2(100) not null,
     ID_QUESTION number(6) not null,
-    constraint PK_CHOIX_REPONSE primary key(ID_CHOIX_REPONSE),
-    constraint FK_CR_ID_QUESTION foreign key(ID_QUESTION)
+    constraint TP2_PK_CHOIX_REPONSE primary key(ID_CHOIX_REPONSE),
+    constraint TP2_FK_CR_ID_QUESTION foreign key(ID_QUESTION)
         references TP2_QUESTION(ID_QUESTION));
         
 create sequence TP2_ID_CHOIX_REPONSE_SEQ
@@ -173,10 +174,10 @@ create table TP2_REPONSE_UTILISATEUR (
     NO_UTILISATEUR number(6) not null,
     ID_CHOIX_REPONSE number(6) not null,
     TEXTE_REP varchar2(1000) not null,
-    constraint PK_REPONSE_UTILISATEUR primary key(NO_UTILISATEUR, ID_CHOIX_REPONSE),
-    constraint FK_RU_NO_UTILISATEUR foreign key(NO_UTILISATEUR)
+    constraint TP2_PK_REPONSE_UTILISATEUR primary key(NO_UTILISATEUR, ID_CHOIX_REPONSE),
+    constraint TP2_FK_RU_NO_UTILISATEUR foreign key(NO_UTILISATEUR)
         references TP2_UTILISATEUR(NO_UTILISATEUR),
-    constraint FK_RU_ID_CHOIX_REPONSE foreign key(ID_CHOIX_REPONSE)
+    constraint TP2_FK_RU_ID_CHOIX_REPONSE foreign key(ID_CHOIX_REPONSE)
         references TP2_CHOIX_REPONSE(ID_CHOIX_REPONSE));
         
 create or replace view TP2_ADMINISTRATEUR (COURRIEL_ADM, MOT_DE_PASSE_ADM, NOM_ADM, PRENOM_ADM) as
@@ -401,7 +402,7 @@ select * from TP2_VUE_HIERARCHIE_ENTREPRISE;
 --insert into TP2_VUE_HIERARCHIE_ENTREPRISE (NOM_ENTREPRISE, CODE_POSTAL, VILLE) values ('Cartel hutt', 'J3D 7Y4', 'Kor Vella')
 
 /* 1)m)iii) (1) Non, il n'est pas possible d'ajouter un enregistrement à partir de la vue.
-            (2) On ne respecte pas les contraintes d'intégrité de la table associée TP2_ENTREPRISE, c'est-à-dire, les not null (tous les champs doivent être remplis) et la PK qui est obligatoire
+            (2) On ne respecte pas les contraintes d'intégrité de la table associée TP2_ENTREPRISE, c'est-à-dire, les not null (tous les champs doivent être remplis) et la PK NO_ENTREPRISE qui est obligatoire pour la table TP2_ENTREPRISE
 */
 
 
@@ -449,7 +450,7 @@ create table TP2_SONDAGE_ARCHIVE (
     DATE_FIN_SON date null, 
     TITRE_SON varchar2(100) not null, 
     CODE_PROJET char(4) not null,
-    constraint PK_SONDAGE_ARCHIVE primary key (NO_SONDAGE),
+    constraint TP2_PK_SONDAGE_ARCHIVE primary key (NO_SONDAGE),
     constraint TP2_AK_SONARCH_TITRE_SON unique (TITRE_SON));
     
 create table TP2_QUESTION_ARCHIVE (
@@ -458,8 +459,8 @@ create table TP2_QUESTION_ARCHIVE (
     CODE_TYPE_QUESTION char(4) not null,
     TEXTE_QUE varchar2(100) not null,
     NO_SONDAGE number(8) not null,
-    constraint PK_QUESTION_ARCHIVE primary key(ID_QUESTION),
-    constraint FK_SONARCH_NO_SONDAGE foreign key(NO_SONDAGE)
+    constraint TP2_PK_QUESTION_ARCHIVE primary key(ID_QUESTION),
+    constraint TP2_FK_SONARCH_NO_SONDAGE foreign key(NO_SONDAGE)
         references TP2_SONDAGE_ARCHIVE(NO_SONDAGE));
     
 create table TP2_CHOIX_REPONSE_ARCHIVE (
@@ -467,8 +468,8 @@ create table TP2_CHOIX_REPONSE_ARCHIVE (
     ORDRE_REPONSE number(3) not null,
     TEXTE_CHO varchar2(100) not null,
     ID_QUESTION number(6) not null,
-    constraint PK_CHOIX_REPONSE_ARCHIVE primary key(ID_CHOIX_REPONSE),
-    constraint FK_CHOARCH_ID_QUESTION foreign key(ID_QUESTION)
+    constraint TP2_PK_CHOIX_REPONSE_ARCHIVE primary key(ID_CHOIX_REPONSE),
+    constraint TP2_FK_CHOARCH_ID_QUESTION foreign key(ID_QUESTION)
         references TP2_QUESTION_ARCHIVE(ID_QUESTION));
         
 create or replace procedure TP2_SP_ARCHIVER_SONDAGE(PI_DATE in date) is 
@@ -499,6 +500,15 @@ insert into TP2_CHOIX_REPONSE_ARCHIVE
                                                 from TP2_SONDAGE
                                                 where DATE_FIN_SON < PI_DATE));
 
+delete from TP2_REPONSE_UTILISATEUR
+    where ID_CHOIX_REPONSE in (select ID_CHOIX_REPONSE
+                                from TP2_CHOIX_REPONSE
+                                where ID_QUESTION in (select ID_QUESTION
+                                                        from TP2_QUESTION
+                                                        where NO_SONDAGE in (select NO_SONDAGE
+                                                                                from TP2_SONDAGE
+                                                                                where DATE_FIN_SON < PI_DATE))); 
+
 delete from TP2_CHOIX_REPONSE
     where ID_QUESTION in (select ID_QUESTION
                             from TP2_QUESTION
@@ -520,8 +530,7 @@ exception
 end TP2_SP_ARCHIVER_SONDAGE;
 /
 
---execute TP2_SP_ARCHIVER_SONDAGE(to_date('2020-01-01', 'RRRR-MM-DD'));
-
+execute TP2_SP_ARCHIVER_SONDAGE(to_date('2020-01-01', 'RRRR-MM-DD'));
 
 
 -- c
@@ -542,7 +551,7 @@ begin
     
     exception
     when E_DIGITS_INVALID then
-    dbms_output.put_line('Le nombre de caractère pour le mot-de-passe est dépassé');
+    dbms_output.put_line('Le nombre de caractère pour le mot de passe est dépassé');
 end TP2_FCT_GENERER_MOT_DE_PASSE;
 /
 
@@ -576,38 +585,111 @@ end TP2_TRG_BIU_DEJA_REPONDU;
 
 --3
 --a
-/*
-create index TP2_IDX_PROJET_NOMPRO 
+--i)
+create index TP2_IDX_PROJET_NOM_PRO 
     on TP2_PROJET (NOM_PRO);
 
-create index TP2_IDX_UTILISATEUR_NOMPRE
+create index TP2_IDX_UTILISATEUR_NOM_PRENOM_UTI
     on TP2_UTILISATEUR (NOM_UTI, PRENOM_UTI);
 
-create index TP2_IDX_ENTREPRISE_NOMENT 
+create index TP2_IDX_ENTREPRISE_NOM_ENT 
     on TP2_ENTREPRISE(NOM_ENT);
     
-create index TP2_IDX_SONDAGE_DCS 
+create index TP2_IDX_SONDAGE_DATE_CREA_SON 
     on TP2_SONDAGE(DATE_CREATION_SON);
---Beaucoup utilisés par les administrateurs pour chercher un projet
 
-create index TP2_IDX_SONDAGE_DFS
+create index TP2_IDX_SONDAGE_DATE_FIN_SON
     on TP2_SONDAGE(DATE_FIN_SON);
---Attribut souvent impliqué dans les requêtes
-AK COURRIEL_UTI (TP2_UTILISATEUR) et TITRE_SONDAGE (TP2_SONDAGE) ???
 
-create index TP2_IDX_QUESTION_CTQ
+create index TP2_IDX_SONDAGE_CODE_PRO 
+    on TP2_SONDAGE(CODE_PROJET);
+
+create index TP2_IDX_QUESTION_CODE_TYPE_QUE
     on TP2_QUESTION (CODE_TYPE_QUESTION);
     
-create index TP2_IDX_QUESTION_NOSON
+create index TP2_IDX_QUESTION_NO_SON
     on TP2_QUESTION (NO_SONDAGE);
 
-create TP2_CHOIX_REPONSE (ID_QUESTION)       
-TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE)
-FK souvent accédé car beaucoup de recherche et manipulation à travers les questions-réponses
+create index TP2_CHOIX_REPONSE_ID_QUE
+    on TP2_CHOIX_REPONSE (ID_QUESTION);    
+    
+create index TP2_REPONSE_UTILISATEUR_NO_UTI 
+    on TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR);
+    
+create index TP2_REPONSE_UTILISATEUR_ID_CHO_REP
+    on TP2_REPONSE_UTILISATEUR (ID_CHOIX_REPONSE);
+/*
+--ii)
+    (1) Les index suivants: TP2_IDX_PROJET_NOM_PRO, TP2_IDX_UTILISATEUR_NOM_PRENOM_UTI, TP2_IDX_ENTREPRISE_NOM_ENT, TP2_IDX_SONDAGE_DATE_CREA_SON,
+         car ce sont des attributs beaucoup utilisés par les administrateurs pour chercher un projet.
+        TP2_IDX_SONDAGE_DATE_FIN_SON puisqu'il est souvent impliqué dans les requêtes de select.
+        Les index suivants: TP2_IDX_SONDAGE_CODE_PRO, TP2_IDX_QUESTION_CODE_TYPE_QUE, TP2_IDX_QUESTION_NO_SON, TP2_CHOIX_REPONSE_ID_QUE, TP2_REPONSE_UTILISATEUR_NO_UTI, TP2_REPONSE_UTILISATEUR_ID_CHO_REP,
+         car ce sont des FK souvent accédées puisqu'il y a beaucoup de recherche et de manipulation dans la base de données à travers les questions-réponses pour chaque sondage.
+        Les index suivants: TP2_IDX_UTILISATEUR_COU_UTI, TP2_IDX_SONDAGE_TIT_SON, car se sont des AK de leur tables respectives.
+    (2) Il n'y aura pas d'index pour ORDRE_QUESTION et ORDRE_REPONSE, car ils vont retournés trop de tuple
 
-*/
---i)
+--iii)  -Chercher toutes les réponses d'un employé pour un sondage
+            grâce à : TP2_REPONSE_UTILISATEUR_NO_UTI, TP2_REPONSE_UTILISATEUR_ID_CHO_REP, TP2_CHOIX_REPONSE_ID_QUE et TP2_IDX_QUESTION_NO_SON
+        -Chercher tous les sondages de tous les projets associés à un utilisateur Administrateur X
+            grâce à : TP2_IDX_SONDAGE_CODE_PRO
+        -Vérifier si un utilisateur à répondu au sondage à l'aide de son adresse courriel
+            grâce à : TP2_AK_UTI_COURRIEL_UTI, TP2_REPONSE_UTILISATEUR_NO_UTI, TP2_REPONSE_UTILISATEUR_ID_CHO_REP, TP2_CHOIX_REPONSE_ID_QUE et TP2_IDX_QUESTION_NO_SON
+        
+ */       
+--b
+--i) La table TP2_QUESTION fut dénormalisée à l'aide de la méthode 7.2.2 (table de liste) de dénormalisation dans le but d'améliorer l'accès à une information peu changeante et régulièrement nécessaire
 
 --ii)
+alter table TP2_QUESTION 
+    add DESC_TYPE_QUE varchar2(40) null;
+                            
+--iii)
+create or replace trigger TP2_TRG_BIU_VERIFIE_DESC_CORRESPOND_CODE_QUE
+    before insert or update on TP2_QUESTION
+    for each row
+declare
+    V_DESC_TYPE varchar2(40);
+begin
+    select DESC_TYPE_QUE into V_DESC_TYPE
+        from TP2_TYPE_QUESTION
+        where CODE_TYPE_QUESTION = :NEW.CODE_TYPE_QUESTION;
+    :NEW.DESC_TYPE_QUE := V_DESC_TYPE;
+end TP2_TRG_BIU_VERIFIE_DESC_CORRESPOND_CODE_QUE;
+/
 
---iii) Création du rapport de diagnostic, 
+create or replace procedure TP2_SP_ACTIVER_TRIGGER(PI_NOM_TRG in varchar2)
+    is
+    pragma AUTONOMOUS_TRANSACTION;
+begin
+    execute immediate 'alter trigger ' || PI_NOM_TRG || ' enable';
+end;
+/
+
+create or replace procedure TP2_SP_DESACTIVER_TRIGGER(PI_NOM_TRG in varchar2)
+    is
+    pragma AUTONOMOUS_TRANSACTION;
+begin
+    execute immediate 'alter trigger ' || PI_NOM_TRG || ' disable';
+end;
+/
+
+create or replace trigger TP2_TRG_BU_CHANGEMENT_TYPE_QUE
+    before update on TP2_TYPE_QUESTION
+    for each row
+begin
+    TP2_SP_DESACTIVER_TRIGGER('TP2_TRG_BIU_VERIFIE_DESC_CORRESPOND_CODE_QUE');
+    
+    update TP2_QUESTION
+        set DESC_TYPE_QUE = :NEW.DESC_TYPE_QUE
+        where CODE_TYPE_QUESTION = :NEW.CODE_TYPE_QUESTION;
+    
+    TP2_SP_ACTIVER_TRIGGER('TP2_TRG_BIU_VERIFIE_DESC_CORRESPOND_CODE_QUE');
+end TP2_TRG_BU_CHANGEMENT_TYPE_QUE;
+/
+
+--iv)
+update TP2_QUESTION Q
+    set Q.DESC_TYPE_QUE = (select T.DESC_TYPE_QUE
+                            from TP2_TYPE_QUESTION T
+                            where Q.CODE_TYPE_QUESTION = T.CODE_TYPE_QUESTION);
+
