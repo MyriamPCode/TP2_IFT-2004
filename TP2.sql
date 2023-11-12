@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 set SERVEROUTPUT ON
 
 drop table TP2_UTILISATEUR cascade constraints;
@@ -542,7 +543,7 @@ begin
     
     exception
     when E_DIGITS_INVALID then
-    dbms_output.put_line('Exceed limits of caracter for password');
+    dbms_output.put_line('Le nombre de caractère pour le mot-de-passe est dépassé');
 end TP2_FCT_GENERER_MOT_DE_PASSE;
 /
 
@@ -569,19 +570,24 @@ begin
     
     exception
         when E_UTI_DEJA_REPONDU then
-            dbms_output.put_line(V_NO_UTILISATEUR + 'already answered sondage');   
+            dbms_output.put_line(V_NO_UTILISATEUR + 'a déjà répondu au sondage');   
 end TP2_TRG_BIU_DEJA_REPONDU;
 /
 
+
 --3
 --a
-NOM_PROJET
-NOM PRENOM EMP
-NOM_ENT
-DATE_CREA_SON
+/*
+NOM_PRO (TP2_PROJET)
+NOM PRENOM EMP = NOM_UTI et PRENOM_UTI (TP2_UTILISATEUR)
+NOM_ENT (TP2_ENTREPRISE)
+DATE_CREATION_SON (TP2_SONDAGE)
+
 DATE_FIN_SON
+AK COURRIEL_UTI (TP2_UTILISATEUR) et TITRE_SONDAGE (TP2_SONDAGE) ???
+*/
 --i)
 
 --ii)
 
---iii)
+--iii) Création du rapport de diagnostic, 
