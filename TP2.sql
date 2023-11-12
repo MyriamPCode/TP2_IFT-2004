@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 set SERVEROUTPUT ON
 
 drop table TP2_UTILISATEUR cascade constraints;
@@ -229,8 +228,8 @@ insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QU
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (TP2_ID_CHOIX_REPONSE_SEQ.nextval, 016, 'Motojet 74-Z, TIE, X-Wing T-65, Y-Wing BTL-S3', 2);
 insert into TP2_CHOIX_REPONSE (ID_CHOIX_REPONSE, ORDRE_REPONSE, TEXTE_CHO, ID_QUESTION) values (TP2_ID_CHOIX_REPONSE_SEQ.nextval, 017, 'Obi-wan Kenobi, Luke Skywalker, Darth Vader, Padme Amidala', 3);
 
-insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10000, 'Yoda');
-insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10001, 'Obi-Wan Kenobi');
+insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10000, 'Piste au sol');
+insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10001, 'X-Wing T-65');
 insert into TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE, TEXTE_REP) values (1000, 10002, 'Darth Vader');
 
 -- c
@@ -521,7 +520,7 @@ exception
 end TP2_SP_ARCHIVER_SONDAGE;
 /
 
-execute TP2_SP_ARCHIVER_SONDAGE(to_date('2020-01-01', 'RRRR-MM-DD'));
+--execute TP2_SP_ARCHIVER_SONDAGE(to_date('2020-01-01', 'RRRR-MM-DD'));
 
 
 
@@ -578,13 +577,34 @@ end TP2_TRG_BIU_DEJA_REPONDU;
 --3
 --a
 /*
-NOM_PRO (TP2_PROJET)
-NOM PRENOM EMP = NOM_UTI et PRENOM_UTI (TP2_UTILISATEUR)
-NOM_ENT (TP2_ENTREPRISE)
-DATE_CREATION_SON (TP2_SONDAGE)
+create index TP2_IDX_PROJET_NOMPRO 
+    on TP2_PROJET (NOM_PRO);
 
-DATE_FIN_SON
+create index TP2_IDX_UTILISATEUR_NOMPRE
+    on TP2_UTILISATEUR (NOM_UTI, PRENOM_UTI);
+
+create index TP2_IDX_ENTREPRISE_NOMENT 
+    on TP2_ENTREPRISE(NOM_ENT);
+    
+create index TP2_IDX_SONDAGE_DCS 
+    on TP2_SONDAGE(DATE_CREATION_SON);
+--Beaucoup utilisés par les administrateurs pour chercher un projet
+
+create index TP2_IDX_SONDAGE_DFS
+    on TP2_SONDAGE(DATE_FIN_SON);
+--Attribut souvent impliqué dans les requêtes
 AK COURRIEL_UTI (TP2_UTILISATEUR) et TITRE_SONDAGE (TP2_SONDAGE) ???
+
+create index TP2_IDX_QUESTION_CTQ
+    on TP2_QUESTION (CODE_TYPE_QUESTION);
+    
+create index TP2_IDX_QUESTION_NOSON
+    on TP2_QUESTION (NO_SONDAGE);
+
+create TP2_CHOIX_REPONSE (ID_QUESTION)       
+TP2_REPONSE_UTILISATEUR (NO_UTILISATEUR, ID_CHOIX_REPONSE)
+FK souvent accédé car beaucoup de recherche et manipulation à travers les questions-réponses
+
 */
 --i)
 
